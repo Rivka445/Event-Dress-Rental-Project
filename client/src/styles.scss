@@ -1,0 +1,161 @@
+@use 'sass:color';
+@import 'primeicons/primeicons.css';
+
+
+$main-color: #6b5b5e;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #faf8f9;
+}
+
+.p-menubar,
+.p-menubar *,
+.p-menubar .p-menuitem,
+.p-menubar .p-menuitem-content,
+.p-menubar .p-menuitem-link,
+.p-menubar .p-menuitem:hover,
+.p-menubar .p-menuitem-content:hover,
+.p-menubar .p-menuitem-link:hover,
+.p-menubar .p-menuitem.p-focus,
+.p-menubar .p-menuitem.p-highlight,
+.p-menubar .p-menuitem-link:focus,
+.p-menubar .p-menuitem-link:active {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.p-button {
+  background-color: $main-color !important;
+  border-color: $main-color !important;
+  
+  &:hover {
+    background-color: color.adjust($main-color, $lightness: -10%) !important;
+    border-color: color.adjust($main-color, $lightness: -10%) !important;
+  }
+}
+
+.p-checkbox .p-checkbox-box.p-highlight {
+  background: #8a7578 !important;
+  border-color: #8a7578 !important;
+}
+
+.p-checkbox .p-checkbox-box {
+  border-color: #ccc !important;
+  background: white !important;
+}
+
+.p-checkbox .p-checkbox-box.p-focus {
+  box-shadow: none !important;
+  border-color: #ccc !important;
+}
+
+.p-checkbox .p-checkbox-box .p-checkbox-icon {
+  color: #fff !important;
+}
+
+.p-slider .p-slider-range {
+  background-color: $main-color !important;
+}
+
+.p-slider .p-slider-handle {
+  border-color: $main-color !important;
+}
+
+/* Global form inputs (PrimeNG) */
+.p-inputtext,
+.p-inputtextarea,
+.p-inputnumber-input,
+.p-dropdown,
+.p-multiselect,
+.p-calendar,
+.p-datepicker,
+.p-select,
+.p-password input,
+textarea,
+select {
+  border-radius: 0.2rem !important;
+  border-color: #d6d0d1 !important;
+  box-shadow: none !important;
+}
+
+.p-inputtext:enabled:hover,
+.p-inputtextarea:enabled:hover,
+.p-inputnumber-input:enabled:hover,
+.p-dropdown:not(.p-disabled):hover,
+.p-multiselect:not(.p-disabled):hover,
+.p-select:not(.p-disabled):hover,
+.p-calendar:not(.p-disabled):hover,
+.p-datepicker:not(.p-disabled):hover,
+textarea:hover,
+select:hover {
+  border-color: color.adjust($main-color, $lightness: 10%) !important;
+}
+
+.p-inputtext:enabled:focus,
+.p-inputtextarea:enabled:focus,
+.p-inputnumber-input:enabled:focus,
+.p-dropdown.p-focus,
+.p-multiselect.p-focus,
+.p-select.p-focus,
+.p-calendar.p-focus,
+.p-datepicker.p-focus,
+.p-inputwrapper-focus,
+textarea:focus,
+select:focus {
+  border-color: $main-color !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.p-multiselect {
+  font-size: 0.85rem !important;
+  
+  .p-multiselect-label {
+    padding: 0.4rem 0.6rem !important;
+    font-size: 0.85rem !important;
+  }
+  
+  .p-multiselect-trigger {
+    width: 2rem !important;
+  }
+}
+
+.p-multiselect.p-focus {
+  border-color: $main-color !important;
+  box-shadow: 0 0 0 0.2rem rgba(107, 91, 94, 0.25) !important;
+}
+
+.p-multiselect-panel .p-multiselect-item.p-highlight {
+  background: white !important;
+  color: #333 !important;
+}
+
+.p-multiselect-panel .p-multiselect-item {
+  background: white !important;
+}
+
+.p-multiselect-panel .p-multiselect-item:hover {
+  background: #f8f8f8 !important;
+}
+
+.p-checkbox-box.p-highlight,
+.p-checkbox .p-checkbox-box.p-highlight,
+.p-checkbox.p-highlight .p-checkbox-box,
+.p-multiselect-panel .p-checkbox .p-checkbox-box.p-highlight,
+.p-multiselect-panel .p-multiselect-item .p-checkbox .p-checkbox-box.p-highlight {
+  background: #8a7578 !important;
+  border-color: #8a7578 !important;
+}
+
+.p-drawer {
+    z-index: 9999 !important; 
+}
+.p-component-overlay {
+    z-index: 9998 !important; 
+}

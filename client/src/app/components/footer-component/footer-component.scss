@@ -1,0 +1,194 @@
+@use 'sass:color';
+
+$main-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$main-color: #6b5b5e;
+$bg-color: #f0e8ea;
+
+.main-footer {
+  position: relative;
+  width: 100%;
+  background-color: $bg-color;
+  color: $main-color;
+  font-family: $main-font;
+  font-weight: 300;
+  padding: 3rem 2rem 1rem;
+  direction: rtl;
+  margin-top: auto;
+
+  .footer-container {
+    max-width: 75rem;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 2.2fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  h4 {
+    margin-bottom: 1.2rem;
+    font-size: 1.1rem;
+    font-weight: 400;
+    border-bottom: 0.0625rem solid rgba($main-color, 0.3);
+    padding-bottom: 0.3125rem;
+    display: inline-block;
+  }
+
+  .footer-section {
+    min-width: 12.5rem;
+
+    p {
+      font-size: 0.8rem;
+      font-weight: 300;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+
+  .opening-hours {
+    margin-top: 1rem;
+    h5 {
+      font-size: 0.8rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+  p { font-size: 0.75rem; font-weight: 300; color: color.adjust($main-color, $lightness: -10%); }
+  }
+
+  .footer-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    gap: 2rem;
+
+    .nav-section ul {
+      list-style: none;
+      padding: 0;
+      li {
+        margin-bottom: 0.6rem;
+        a {
+          color: $main-color;
+          text-decoration: none;
+          font-size: 0.9rem;
+          font-weight: 300;
+          transition: color 0.2s ease, transform 0.2s ease;
+          &:hover {
+            opacity: 1;
+            color: color.scale($main-color, $lightness: -10%);
+            transform: translateX(-0.2rem);
+          }
+        }
+      }
+    }
+  }
+
+  .brand-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: right;
+
+    .brand-title {
+      margin: 0 0 0.5rem;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: $main-color;
+    }
+
+    .brand-text {
+      margin: 0 0 1.2rem;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: color.scale($main-color, $lightness: 15%);
+    }
+
+    .logo {
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: opacity 0.3s;
+      &:hover { opacity: 0.8; }
+      .footer-logo {
+        max-width: 15.625rem;
+        height: auto;
+      }
+    }
+    .social-links {
+      display: flex;
+      justify-content: flex-start;
+      gap: 1.2rem;
+      .social-icon {
+        color: $main-color;
+        font-size: 1.3rem;
+        transition: transform 0.2s ease, color 0.2s ease;
+
+        &:hover {
+          transform: translateY(-0.15rem);
+          color: color.scale($main-color, $lightness: -10%);
+        }
+      }
+    }
+  }
+
+  .footer-bottom {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 0.0625rem solid rgba($main-color, 0.1);
+    font-size: 0.8rem;
+    font-weight: 300;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      a {
+        color: $main-color;
+        text-decoration: none;
+        font-weight: 400;
+        transition: color 0.2s ease;
+
+        &:hover {
+          color: color.scale($main-color, $lightness: -10%);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 48rem) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2rem;
+  }
+  .footer-nav {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .footer-section p { justify-content: center; }
+  .brand-section {
+    align-items: center;
+    text-align: center;
+  }
+  .brand-section .social-links {
+    justify-content: center;
+  }
+}
+
+::ng-deep {
+  .p-dialog .p-dialog-header {
+    font-family: $main-font !important;
+    font-weight: 400 !important;
+    direction: rtl !important;
+  }
+}

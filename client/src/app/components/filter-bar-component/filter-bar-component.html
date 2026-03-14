@@ -1,0 +1,49 @@
+<div class="filter-container">
+  <div class="filter-section">
+    <label>קטגוריות</label>
+    <p-multiSelect
+      [(ngModel)]="selectedCategories"
+      [options]="categories"
+      optionLabel="name"
+      optionValue="id"
+      placeholder="בחר קטגוריות"
+      [filter]="true"
+      [showToggleAll]="false"
+      [style]="{'width': '200px'}"
+      (onChange)="categoriesTouched = true">
+    </p-multiSelect>
+  </div>
+
+  <div class="filter-section">
+    <label>צבעים</label>
+    <p-multiSelect 
+      [(ngModel)]="selectedColors" 
+      [options]="colors" 
+      optionLabel="name" 
+      optionValue="value"
+      placeholder="בחר צבעים"
+      [filter]="false"
+      [showToggleAll]="false"
+      [style]="{'width': '140px'}"
+      (onChange)="colorsTouched = true">
+    </p-multiSelect>
+  </div>
+
+  <div class="filter-section">
+    <label>טווח מחירים: {{priceRange[0]}} - {{priceRange[1]}} ₪</label>
+    <p-slider 
+      [(ngModel)]="priceRange" 
+      [range]="true" 
+      [min]="0" 
+      [max]="1000" 
+      [step]="100"
+      [style]="{'width': '100%'}"
+      (onSlideEnd)="priceTouched = true">
+    </p-slider>
+  </div>
+
+  <div class="filter-actions">
+    <p-button label="החל סינון" icon="pi pi-filter" size="small" (onClick)="applyFilters()"></p-button>
+    <p-button label="איפוס" icon="pi pi-times" size="small" severity="secondary" (onClick)="resetFilters()"></p-button>
+  </div>
+</div>

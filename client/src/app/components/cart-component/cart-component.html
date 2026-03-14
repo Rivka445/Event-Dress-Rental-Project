@@ -1,0 +1,55 @@
+<div class="cart-container">
+  <h1>סל הקניות שלי</h1>
+
+  <div class="cart-items">
+    @for (draft of cartService.draftOrders(); track draft.id) {
+      <div class="draft-block">
+        <div class="draft-selection-header">
+          <input type="checkbox" [(ngModel)]="draft.selected" class="custom-checkbox">
+          <label class="draft-label">
+            <i class="pi pi-calendar"></i>
+            <span>אירוע בתאריך <strong>{{ draft.eventDate | date:'dd/MM/yyyy' }}</strong></span>
+          </label>
+        </div>
+
+        @for (item of draft.items; track item.id) {
+          <div class="cart-item-row" [class.slide-in]="isAnimated(draft.id, item.id)">
+            <div class="item-img">
+              <img [src]="item.modelImgUrl" [alt]="item.modelName" (error)="onImageError($event)">
+            </div>
+            <div class="item-info">
+              <h4>{{ item.modelName }}</h4>
+              <div class="size-label">מידה: {{ item.size }}</div>
+            </div>
+            <div class="price">{{ item.price }} ₪</div>
+            <button class="remove-item-btn icon-only-btn" (click)="removeItem(draft.id, item.id)">
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+        }
+
+        <div class="draft-subtotal">
+          <span>סיכום ביניים:</span>
+          <strong>{{ cartService.getDraftTotalPrice(draft.id) }} ₪</strong>
+        </div>
+      </div>
+    } @empty {
+      <p>סל הקניות שלך ריק</p>
+    }
+
+    @if (cartService.draftOrders().length > 0) {
+      <div class="cart-summary">
+        <div class="summary-title">סיכום הזמנה</div>
+        <div class="summary-row">
+          <span>סה"כ פריטים</span>
+          <span>{{ cartService.cartItemsCount() }}</span>
+        </div>
+        <div class="summary-total">
+          <span>סה"כ לתשלום</span>
+          <span>{{ cartService.getAllDraftsTotalPrice() }} ₪</span>
+        </div>
+        <button class="checkout-btn" (click)="processOrders()">מעבר לתשלום</button>
+      </div>
+    }
+  </div>
+</div>

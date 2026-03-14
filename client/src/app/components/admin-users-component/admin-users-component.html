@@ -1,0 +1,132 @@
+<div class="admin-users-container">
+  <div class="header-section">
+    <div class="header-actions">
+      <p-button label="חזור לאיזור ניהול" icon="pi pi-arrow-right" (onClick)="goBack()"></p-button>
+    </div>
+  </div>
+
+  <main class="users-content">
+    <div class="title-section">
+      <div>
+        <h2 class="page-title">ניהול משתמשים</h2>
+        <p class="page-subtitle">חיפוש משתמשים והוספת משתמשים חדשים</p>
+      </div>
+      <div class="title-actions">
+        <div class="search-compact">
+          <input pInputText type="text" [(ngModel)]="searchQuery" placeholder="חפש משתמש..." (keyup.enter)="searchUsers()" (input)="searchUsers()" />
+          <i class="pi pi-search search-icon"></i>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="searchError()">
+      <div class="error-message">{{ searchError() }}</div>
+    </ng-container>
+
+  <p-table [value]="users()"
+       [loading]="loading()"
+       [paginator]="true"
+       [rows]="10"
+       [rowsPerPageOptions]="[5, 10, 20]"
+       styleClass="p-datatable-striped">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>מזהה</th>
+          <th>שם פרטי</th>
+          <th>שם משפחה</th>
+          <th>אימייל</th>
+          <th>טלפון</th>
+          <th>תפקיד</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.firstName }}</td>
+          <td>{{ user.lastName }}</td>
+          <td>{{ user.email || 'לא צוין' }}</td>
+          <td>{{ user.phone }}</td>
+          <td>
+            <span [class.admin-badge]="(user.role || '').toLowerCase() === 'admin'">
+              {{ (user.role || '').toLowerCase() === 'admin' ? 'מנהל' : 'משתמש' }}
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" style="text-align: center;">אין משתמשים במערכת</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </main>
+</div>
+
+<p-dialog [(visible)]="addDialog" header="הוספת משתמש חדש" [modal]="true" [style]="{width: '650px'}" styleClass="model-dialog">
+  <div class="add-dialog-content">
+    @if (addUserError) {
+      <div class="form-error">{{ addUserError }}</div>
+    }
+    <div class="form-row">
+      <div class="form-field">
+        <label>שם פרטי *</label>
+        <input pInputText [(ngModel)]="newUser.firstName" placeholder="הכנס שם פרטי" (blur)="addFormTouched = true" />
+        @if (addFormTouched && !isNameValid(newUser.firstName)) {
+          <small class="field-error">נא להזין שם פרטי תקין</small>
+        }
+      </div>
+      <div class="form-field">
+        <label>שם משפחה *</label>
+        <input pInputText [(ngModel)]="newUser.lastName" placeholder="הכנס שם משפחה" (blur)="addFormTouched = true" />
+        @if (addFormTouched && !isNameValid(newUser.lastName)) {
+          <small class="field-error">נא להזין שם משפחה תקין</small>
+        }
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label>אימייל</label>
+        <input pInputText [(ngModel)]="newUser.email" placeholder="הכנס אימייל" (blur)="addFormTouched = true" />
+        @if (addFormTouched && !isEmailValid()) {
+          <small class="field-error">נא להזין אימייל תקין</small>
+        }
+      </div>
+      <div class="form-field">
+        <label>טלפון *</label>
+        <input pInputText [(ngModel)]="newUser.phone" placeholder="הכנס טלפון" (blur)="addFormTouched = true" />
+        @if (addFormTouched && !isPhoneValid()) {
+          <small class="field-error">מספר טלפון חייב להתחיל ב־05 ולהכיל 10 ספרות</small>
+        }
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label>סיסמה *</label>
+        <input pInputText type="password" [(ngModel)]="newUser.password" placeholder="מינימום 6 תווים" (blur)="addFormTouched = true" />
+        @if (addFormTouched && !isPasswordValid()) {
+          <small class="field-error">סיסמה חייבת להכיל לפחות 6 תווים</small>
+        }
+      </div>
+      <div class="form-field">
+        <label>תפקיד *</label>
+        <p-select [(ngModel)]="newUser.role"
+                  [options]="roleOptions"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="בחר תפקיד"
+                  [style]="{width: '100%'}"
+                  (onBlur)="addFormTouched = true"></p-select>
+        @if (addFormTouched && !isRoleValid()) {
+          <small class="field-error">נא לבחור תפקיד</small>
+        }
+      </div>
+    </div>
+
+    <div class="dialog-actions">
+      <p-button label="שמור שינויים" icon="pi pi-check" (onClick)="saveUser()"></p-button>
+      <p-button label="ביטול" severity="secondary" (onClick)="addDialog.set(false)"></p-button>
+    </div>
+  </div>
+</p-dialog>

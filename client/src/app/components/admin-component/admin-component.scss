@@ -1,0 +1,92 @@
+@use "sass:color";
+$main-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+$main-color: #6b5b5e;
+$accent-color: #d4c5c7;
+$light-pink: #f8f1f2;
+$bg-color: #f4eeee;
+
+.admin-container {
+  font-family: $main-font;
+  background-color: #fafafa;
+  padding: 3rem 2rem;
+  direction: rtl;
+  color: $main-color;
+  min-height: 100vh;
+  max-width: 87.5rem;
+  margin: 0 auto;
+
+  .welcome {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: $main-color;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: color.scale($main-color, $lightness: 20%);
+    }
+  }
+
+  .admin-sections {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+
+    @media (max-width: 64rem) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .section-card {
+    background: #ffffff;
+    border-radius: 1.5rem;
+    box-shadow: 0 0.9375rem 2.5rem rgba(0, 0, 0, 0.04);
+    padding: 5rem 3rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  border: 0.125rem solid transparent;
+  min-height: 21.875rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      transform: translateY(-0.5rem);
+      box-shadow: 0 1.25rem 3.125rem rgba(0, 0, 0, 0.08);
+      border-color: $accent-color;
+
+      .card-icon {
+        transform: scale(1.1);
+        color: $main-color;
+      }
+    }
+
+    .card-icon {
+      font-size: 5rem;
+      color: $accent-color;
+      margin-bottom: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    h3 {
+      font-size: 1.8rem;
+      font-weight: 400;
+      color: $main-color;
+      margin: 0 0 1.5rem 0;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: color.scale($main-color, $lightness: 20%);
+      margin: 0;
+      line-height: 1.6;
+    }
+  }
+}

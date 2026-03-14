@@ -1,0 +1,187 @@
+<div class="admin-orders-container">
+  <div class="header-section">
+    <div class="header-actions">
+      <p-button 
+        label="חזור לאיזור ניהול" 
+        icon="pi pi-arrow-right" 
+        (onClick)="goBack()">
+      </p-button>
+    </div>
+  </div>
+
+  <main class="orders-content">
+    <h2 class="page-title">ניהול הזמנות</h2>
+    <p class="page-subtitle">צפייה ועדכון סטטוס הזמנות ופרטי לקוחות</p>
+
+    <div class="filter-section">
+      <div class="filter-group">
+        <label>הצג הזמנות שטרם נארזו עד תאריך:</label>
+        <input type="date" [(ngModel)]="filterDate" />
+        <p-button label="סנן" icon="pi pi-filter" (onClick)="filterByDate()" [disabled]="!filterDate"></p-button>
+      </div>
+      <div class="filter-divider"></div>
+      <div class="filter-group">
+        <label>הצג הזמנות לפי מזהה משתמש:</label>
+        <input type="number" [(ngModel)]="filterUserId" placeholder="הכנס מזהה משתמש" />
+        <p-button label="סנן" icon="pi pi-filter" (onClick)="filterByUserId()" [disabled]="!filterUserId"></p-button>
+      </div>
+      <p-button *ngIf="isFiltered" label="נקה סינון" icon="pi pi-times" severity="secondary" (onClick)="clearFilter()"></p-button>
+    </div>
+
+    <p-table 
+      [value]="orders" 
+      [loading]="loading"
+      [paginator]="true" 
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="מציג {first} עד {last} מתוך {totalRecords} הזמנות"
+      styleClass="p-datatable-striped">
+      
+      <ng-template pTemplate="header">
+        <tr>
+          <th>מספר הזמנה</th>
+          <th>תאריך הזמנה</th>
+          <th>תאריך אירוע</th>
+          <th>מזהה משתמש</th>
+          <th>אימייל</th>
+          <th>טלפון</th>
+          <th>מחיר סופי</th>
+          <th>סטטוס</th>
+          <th>הערות</th>
+          <th>פעולות</th>
+        </tr>
+      </ng-template>
+      
+      <ng-template pTemplate="body" let-order>
+        <tr [class.cancelled-order]="order.statusId === 4" 
+            [class.completed-order]="order.statusId === 3"
+            [class.ready-order]="order.statusId === 2">
+          <td>
+            <div class="order-id-cell">
+              <span>{{ order.id }}</span>
+              <i *ngIf="order.statusId === 4" class="pi pi-times-circle cancelled-icon" title="הזמנה בוטלה"></i>
+              <i *ngIf="order.statusId === 3" class="pi pi-check-circle success-icon" title="הזמנה הוחזרה"></i>
+              <i *ngIf="order.statusId === 2" class="pi pi-box ready-icon" title="מוכנה לאיסוף"></i>
+            </div>
+          </td>
+          <td>{{ order.orderDate | date:'dd/MM/yyyy' }}</td>
+          <td>{{ order.eventDate | date:'dd/MM/yyyy' }}</td>
+          <td>{{ order.userId }}</td>
+          <td>{{ order.userEmail || '-' }}</td>
+          <td>{{ order.userPhone || '-' }}</td>
+          <td>{{ order.finalPrice }} ₪</td>
+          <td>
+            <span [class.status-cancelled]="order.statusId === 4" 
+                  [class.status-completed]="order.statusId === 3"
+                  [class.status-ready]="order.statusId === 2">{{ getStatusName(order.statusId) || '-' }}</span>
+          </td>
+          <td>{{ order.note || '-' }}</td>
+          <td>
+            <p-button label="פרטים" icon="pi pi-search" (onClick)="toggleDetails(order)" [text]="true"></p-button>
+          </td>
+        </tr>
+
+        <!-- expanded details row -->
+        <tr *ngIf="isExpanded(order)" class="expanded-row">
+          <td colspan="10">
+            <div class="order-details">
+              <h4>פרטי הזמנה - {{ order.id }} | סטטוס: {{ getStatusName(order.statusId) || '-' }}</h4>
+              
+              <div class="user-info">
+                <div class="user-detail">
+                  <i class="pi pi-user"></i>
+                  <strong>שם:</strong>
+                  <span>{{ order.userFirstName }} {{ order.userLastName }}</span>
+                </div>
+                <div class="user-detail">
+                  <i class="pi pi-id-card"></i>
+                  <strong>מזהה משתמש:</strong>
+                  <span>{{ order.userId }}</span>
+                </div>
+                <div class="user-detail">
+                  <i class="pi pi-envelope"></i>
+                  <strong>מייל:</strong>
+                  <span>{{ order.userEmail || '-' }}</span>
+                </div>
+                <div class="user-detail">
+                  <i class="pi pi-phone"></i>
+                  <strong>טלפון:</strong>
+                  <span>{{ order.userPhone || '-' }}</span>
+                </div>
+              </div>
+
+              <div class="status-update">
+                <label>עדכן סטטוס:</label>
+                <select [(ngModel)]="selectedStatus[order.id]" [disabled]="updatingOrderIds.has(order.id)">
+                  <option *ngFor="let s of getAvailableStatuses(order.statusId)" [ngValue]="s.id">{{ s.name }}</option>
+                </select>
+                <p-button 
+                  label="עדכן" 
+                  icon="pi pi-check" 
+                  (onClick)="updateStatus(order)"
+                  [disabled]="updatingOrderIds.has(order.id) || selectedStatus[order.id] === order.statusId"
+                  [text]="true">
+                </p-button>
+                <span *ngIf="updatingOrderIds.has(order.id)">מעדכן...</span>
+              </div>
+
+              <div *ngIf="!order.orderItems || order.orderItems.length === 0">אין פריטי הזמנה</div>
+              <div *ngIf="order.orderItems && order.orderItems.length">
+                <table class="details-table">
+                  <thead>
+                    <tr>
+                      <th>שם דגם</th>
+                      <th>מחיר פריט</th>
+                      <th>מידה</th>
+                      <th>תמונת דגם</th>
+                      <th>הערות על השמלות</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of order.orderItems">
+                      <td>{{ item.modelName || '-' }}</td>
+                      <td>{{ item.dressPrice }} ₪</td>
+                      <td>
+                        <ng-container *ngIf="dressCache[item.dressId]; else sizeLoading">
+                          {{ dressCache[item.dressId].size || '-' }}
+                        </ng-container>
+                        <ng-template #sizeLoading>
+                          <span *ngIf="loadingDressIds.has(item.dressId)">טוען...</span>
+                          <span *ngIf="!loadingDressIds.has(item.dressId)">-</span>
+                        </ng-template>
+                      </td>
+                      <td>
+                        <ng-container *ngIf="dressCache[item.dressId]; else imgLoading">
+                          <img [src]="dressCache[item.dressId].modelImgUrl" alt="img" style="height:50px;" />
+                        </ng-container>
+                        <ng-template #imgLoading>
+                          <span *ngIf="loadingDressIds.has(item.dressId)">טוען...</span>
+                          <span *ngIf="!loadingDressIds.has(item.dressId)">-</span>
+                        </ng-template>
+                      </td>
+                      <td>
+                        <ng-container *ngIf="dressCache[item.dressId]; else noteLoading">
+                          {{ dressCache[item.dressId].note || '-' }}
+                        </ng-container>
+                        <ng-template #noteLoading>
+                          <span *ngIf="loadingDressIds.has(item.dressId)">טוען...</span>
+                          <span *ngIf="!loadingDressIds.has(item.dressId)">-</span>
+                        </ng-template>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="10" class="text-center">אין הזמנות במערכת</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </main>
+</div>

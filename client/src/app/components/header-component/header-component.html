@@ -1,0 +1,57 @@
+<p-menubar [model]="items">
+  <ng-template pTemplate="start">
+
+    <div class="header-icons">
+
+      <!-- Hide cart for admin users -->
+      <div *ngIf="!isAdmin()" class="icon-circle cart-wrapper" (click)="onCart()">
+        <i class="pi pi-shopping-cart"></i>
+        <span class="cart-badge">{{ cartService.cartItemsCount() }}</span>
+      </div>
+
+      <ng-container *ngIf="isLoggedIn(); else guest">
+        <div class="user-menu-wrapper">
+          <div class="user-button" (click)="toggleUserMenu($event, userMenu)">
+            <i class="pi pi-user"></i>
+            <span class="user-greeting">הי {{ currentUser()?.firstName }}</span>
+            <i class="pi pi-chevron-down"></i>
+          </div>
+          <p-menu #userMenu [model]="userMenuItems" [popup]="true" [appendTo]="'body'"></p-menu>
+        </div>
+      </ng-container>
+      <ng-template #guest>
+        <div class="icon-circle" (click)="toggleGuestMenu($event, guestMenu)">
+          <i class="pi pi-user"></i>
+        </div>
+        <p-menu #guestMenu [model]="guestMenuItems" [popup]="true" [appendTo]="'body'"></p-menu>
+      </ng-template>
+
+      <div class="search-wrapper" [class.search-active]="searchActive">
+        <div class="icon-circle" (click)="openSearch()">
+          <i class="pi pi-search"></i>
+        </div>
+
+        <ng-container *ngIf="searchActive">
+          <div class="search-input-wrapper">
+            <input
+              type="text"
+              [(ngModel)]="searchTextLocal"
+              (ngModelChange)="onSearchTextChange()"
+              (keyup.enter)="performSearch()"
+              placeholder="חיפוש..."
+              class="search-input"
+              autofocus />
+            <i class="pi pi-times search-close" (click)="closeSearch()"></i>
+          </div>
+        </ng-container>
+      </div>
+
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="end">
+    <a routerLink="/" style="cursor: pointer;">
+      <img src="/logo.png" alt="Logo" class="logo" />
+    </a>
+  </ng-template>
+</p-menubar>

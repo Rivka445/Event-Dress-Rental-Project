@@ -1,0 +1,113 @@
+<div class="checkout-container">
+  <h1>סיכום הזמנה</h1>
+
+  <div class="checkout-layout">
+
+    <div class="checkout-items">
+      @for (draft of cartService.draftOrders(); track draft.id) {
+        <div class="draft-block">
+          
+          <div class="draft-selection-header">
+            <input type="checkbox" [(ngModel)]="draft.selected" class="custom-checkbox">
+            <label class="draft-label">
+              <i class="pi pi-calendar"></i>
+              <span>אירוע בתאריך <strong>{{ draft.eventDate | date:'dd/MM/yyyy' }}</strong></span>
+            </label>
+            <button class="remove-draft-btn icon-only-btn" (click)="removeDraft(draft.id)">
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+
+          @for (item of draft.items; track item.id) {
+            <div class="checkout-item-row">
+              <div class="item-img">
+                <img [src]="item.modelImgUrl" [alt]="item.modelName" (error)="onImageError($event)">
+              </div>
+              <div class="item-info">
+                <h4>{{ item.modelName }}</h4>
+                <div class="size-label">מידה: {{ item.size }}</div>
+              </div>
+              <div class="price">{{ item.price }} ₪</div>
+              <button class="remove-item-btn icon-only-btn" (click)="removeItem(draft.id, item.id)">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          }
+
+          <div class="draft-subtotal">
+            <span>סיכום זמני:</span>
+            <strong>{{ cartService.getDraftTotalPrice(draft.id) }} ₪</strong>
+          </div>
+
+          <div class="draft-note">
+            <label>הערות להזמנה (אופציונלי)</label>
+            <textarea [(ngModel)]="draft.note" placeholder="הוסף הערות או בקשות מיוחדות..." rows="3"></textarea>
+          </div>
+        </div>
+      } @empty {
+        <p>סל הקניות שלך ריק</p>
+      }
+    </div>
+
+    @if (cartService.draftOrders().length > 0) {
+      <div class="checkout-summary">
+        <div class="summary-title">סיכום הזמנה</div>
+
+        <div class="summary-row">
+          <span>סה"כ פריטים</span>
+          <span>{{ totalItems() }}</span>
+        </div>
+
+        <div class="summary-total">
+          <span>סה"כ לתשלום</span>
+          <span>{{ totalPrice() }} ₪</span>
+        </div>
+
+        <div class="payment-form">
+          <div class="form-row">
+            <label>שם בעל הכרטיס</label>
+            <input type="text" [(ngModel)]="cardName" (blur)="formTouched = true" placeholder="שם מלא" />
+            @if (formTouched && !isCardNameValid()) {
+              <small class="field-error">נא להזין שם תקין</small>
+            }
+          </div>
+
+          <div class="form-row">
+            <label>מספר כרטיס</label>
+            <input type="text" [(ngModel)]="cardNumber" (blur)="formTouched = true" placeholder="0000 0000 0000 0000" />
+            @if (formTouched && !isCardNumberValid()) {
+              <small class="field-error">מספר כרטיס לא תקין</small>
+            }
+          </div>
+
+          <div class="form-grid">
+            <div class="form-row">
+              <label>תוקף (MM/YY)</label>
+              <input type="text" [(ngModel)]="cardExpiry" (blur)="formTouched = true" placeholder="MM/YY" />
+              @if (formTouched && !isExpiryValid()) {
+                <small class="field-error">תוקף לא תקין</small>
+              }
+            </div>
+            <div class="form-row">
+              <label>CVV</label>
+              <input type="password" [(ngModel)]="cardCvv" (blur)="formTouched = true" placeholder="***" />
+              @if (formTouched && !isCvvValid()) {
+                <small class="field-error">CVV לא תקין</small>
+              }
+            </div>
+          </div>
+        </div>
+
+        <button class="pay-btn" [disabled]="!isPaymentFormValid()" (click)="pay()">לתשלום</button>
+      </div>
+    }
+
+  </div>
+
+  @if (alertMessage) {
+    <div class="custom-alert" [class.error]="isError">
+      <i [class]="isError ? 'pi pi-exclamation-circle' : 'pi pi-check-circle'"></i>
+      <span>{{ alertMessage }}</span>
+    </div>
+  }
+</div>

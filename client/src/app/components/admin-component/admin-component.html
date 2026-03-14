@@ -1,0 +1,28 @@
+<div class="admin-container">
+  @if (currentUser()) {
+    <div class="welcome">
+      <h2>שלום {{ currentUser()?.firstName }} {{ currentUser()?.lastName }}</h2>
+      <p>ברוך הבא לאיזור הניהול</p>
+    </div>
+
+    <div class="admin-sections">
+      <div class="section-card" routerLink="/admin/users">
+        <i class="pi pi-users card-icon"></i>
+        <h3>ניהול משתמשים</h3>
+        <p>צפייה ועריכת משתמשים במערכת</p>
+      </div>
+
+      <div class="section-card" routerLink="/admin/models">
+        <i class="pi pi-shopping-bag card-icon"></i>
+        <h3>ניהול מוצרים</h3>
+        <p>צפייה ועריכת מוצרים בקטלוג</p>
+      </div>
+
+      <div class="section-card" routerLink="/admin/orders">
+        <i class="pi pi-list card-icon"></i>
+        <h3>ניהול הזמנות</h3>
+        <p>צפייה וניהול הזמנות לקוחות</p>
+      </div>
+    </div>
+  }
+</div>

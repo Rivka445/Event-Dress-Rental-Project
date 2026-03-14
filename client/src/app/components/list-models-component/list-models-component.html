@@ -1,0 +1,67 @@
+<div class="dress-list-container">
+  <div class="filter-bar-horizontal">
+    <app-filter-bar></app-filter-bar>
+  </div>
+  
+  <main class="models-content">
+    <h2 class="page-title">שמלות</h2>
+    
+    @if (loading()) {
+      <div class="loading-container">
+        <p-progressSpinner></p-progressSpinner>
+        <p>טוען שמלות...</p>
+      </div>
+    } @else {
+      @if (models().length === 0) {
+        <div class="empty-state">
+          <i class="pi pi-search"></i>
+          <p>לא נמצאו שמלות</p>
+        </div>
+      } @else {
+        <div class="models-grid">
+          @for (model of models(); track model.id) {
+            <div class="model-item">
+              <a [routerLink]="['/model', model.id]" style="cursor: pointer; text-decoration: none;">
+                <app-model-card-component [model]="model"></app-model-card-component>
+              </a>
+            </div>
+          }
+        </div>
+        
+        <div class="custom-pagination">
+          <button 
+            class="page-circle arrow" 
+            (click)="goToLastPage()" 
+            [disabled]="!hasNext()">
+            <i class="pi pi-angle-double-right"></i>
+          </button>
+          
+          <button 
+            class="page-circle arrow" 
+            (click)="goToNextPage()" 
+            [disabled]="!hasNext()">
+            <i class="pi pi-angle-right"></i>
+          </button>
+          
+          <div class="page-circle current">
+            {{ currentPage() }}
+          </div>
+          
+          <button 
+            class="page-circle arrow" 
+            (click)="goToPrevPage()" 
+            [disabled]="!hasPrev()">
+            <i class="pi pi-angle-left"></i>
+          </button>
+          
+          <button 
+            class="page-circle arrow" 
+            (click)="goToFirstPage()" 
+            [disabled]="!hasPrev()">
+            <i class="pi pi-angle-double-left"></i>
+          </button>
+        </div>
+      }
+    }
+  </main>
+</div>

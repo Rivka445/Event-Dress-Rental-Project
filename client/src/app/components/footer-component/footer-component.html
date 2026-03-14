@@ -1,0 +1,79 @@
+<footer class="main-footer">
+  <div class="footer-container">
+    <div class="footer-grid">
+      <div class="footer-section brand-section">
+        <a routerLink="/home" class="logo">
+          <img src="/image.png" alt="Logo" class="footer-logo" />
+        </a>
+        <h3 class="brand-title">Event Dress Rental</h3>
+        <p class="brand-text">סטודיו להשכרת שמלות יוקרה עם התאמה אישית, שירות חם ואיסוף מהיר לכל אירוע.</p>
+        <div class="social-links">
+          @for (social of socials; track social.icon) {
+            <a [href]="social.link" class="social-icon" aria-label="Social">
+              <i [class]="social.icon"></i>
+            </a>
+          }
+        </div>
+      </div>
+
+      <div class="footer-nav">
+        @for (section of footerSections; track section.title) {
+          <div class="nav-section">
+            <h4>{{ section.title }}</h4>
+            <ul>
+              @for (link of section.links; track link.label) {
+                <li><a [routerLink]="link.url" (click)="onLinkClick(link, $event)">{{ link.label }}</a></li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+
+      <div class="footer-section contact-info">
+      <h4>צור קשר</h4>
+      <p><i class="pi pi-map-marker"></i> {{ contactInfo.address }}</p>
+      <p><i class="pi pi-phone"></i> {{ contactInfo.phone }}</p>
+      
+      <div class="opening-hours">
+        <h5><i class="pi pi-clock"></i> שעות פתיחה:</h5>
+        @for (item of contactInfo.hours; track item.days) {
+          <p>{{ item.days }}: {{ item.time }}</p>
+        }
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-bottom-links">
+      @for (link of legalLinks; track link.label) {
+        <a [routerLink]="link.url" (click)="onLinkClick(link, $event)">{{ link.label }}</a>
+      }
+    </div>
+    <p>© {{ currentYear() }} כל הזכויות שמורות</p>
+  </div>
+</footer>
+
+<p-dialog [(visible)]="showTermsDialog" [modal]="true" [style]="{width: '43.75rem', maxHeight: '80vh'}" [rtl]="true" header="תקנון אתר">
+  <div style="padding: 1rem; line-height: 1.8; color: #6b5b5e; direction: rtl; text-align: right; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+    <h3 style="font-weight: 500; margin-bottom: 1rem;">תקנון אתר השכרת שמלות לאירועים</h3>
+    
+    <h4 style="font-weight: 400; margin-top: 1.5rem; margin-bottom: 0.5rem;">1. כללי</h4>
+    <p style="font-weight: 300;">ביצוע הזמנה באתר זה, אתם מסכימים לתנאי התקנון המפורטים להלן. אנא קראו בעיון את התנאים לפני ביצוע ההזמנה.</p>
+
+    <h4 style="font-weight: 400; margin-top: 1.5rem; margin-bottom: 0.5rem;">2. תנאי השכרה</h4>
+    <p style="font-weight: 300;">השכרת שמלה מתבצעת לתקופה מוגדרת בלבד. השמלה צריכה להיות מוחזרת במצב טוב ונקיה. איחור בהחזרה עשוי לגרור לתשלום נוסף.</p>
+
+    <h4 style="font-weight: 400; margin-top: 1.5rem; margin-bottom: 0.5rem;">3. תשלום וביטולים</h4>
+    <p style="font-weight: 300;">התשלום מתבצע בעת ביצוע ההזימנה. ביטול הזמנה עד 7 ימים לפני מועד האיסוף יזכה בהחזר כספי מלא. ביטול בתוך 7 ימים לפני האירוע יזכה בהחזר של 50% מהתשלום.</p>
+
+    <h4 style="font-weight: 400; margin-top: 1.5rem; margin-bottom: 0.5rem;">4. נזקים ואחריות</h4>
+    <p style="font-weight: 300;">השוכר אחראי לשמירה על השמלה ולכל נזק שייגרם לה. מחיר תיקון נזקים ייקבע על פי הערכת מקצועית.</p>
+
+    <h4 style="font-weight: 400; margin-top: 1.5rem; margin-bottom: 0.5rem;">5. פרטיות ואבטחת מידע</h4>
+    <p style="font-weight: 300;">אנו מתחייבים לשמור על פרטיותכם ולא להעבירם לצד שלישי ללא אישורכם.</p>
+
+    <h4 style="font-weight: 400; margin-top: 1.5rem; margin-bottom: 0.5rem;">6. שינויים בתקנון</h4>
+    <p style="font-weight: 300;">אנו שומרים לעצמנו את הזכות לעדכן את התקנון מפעם לפעם. המשך שימוש באתר מהווה הסכמה לתנאים המעודכנים.</p>
+  </div>
+</p-dialog>

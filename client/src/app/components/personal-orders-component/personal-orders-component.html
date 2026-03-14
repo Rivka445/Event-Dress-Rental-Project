@@ -1,0 +1,96 @@
+<div class="orders-container">
+  <h2>ההזמנות שלי</h2>
+
+  @if (loading()) {
+    <p>טוען...</p>
+  } @else if (orders().length === 0) {
+    <p class="empty-message">לא נמצאו הזמנות</p>
+  } @else {
+    <div class="orders-grid">
+      @for (order of orders(); track order.id) {
+        <div class="order-card">
+          <div class="order-header">
+            <div class="order-number">#{{ order.id }}</div>
+            <p-tag [value]="order.statusName" [severity]="getSeverity(order.statusName)"></p-tag>
+          </div>
+          
+          <div class="order-info">
+            <div class="info-row">
+              <i class="pi pi-calendar"></i>
+              <span>תאריך הזמנה: {{ order.orderDate | date:'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="info-row">
+              <i class="pi pi-calendar-plus"></i>
+              <span>תאריך אירוע: {{ order.eventDate | date:'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="info-row price">
+              <i class="pi pi-money-bill"></i>
+              <span>סה"כ: {{ order.finalPrice }} ₪</span>
+            </div>
+          </div>
+
+          <button class="view-details-btn" (click)="viewOrderDetails(order)">
+            <i class="pi pi-eye"></i>
+            צפה בפרטים
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<p-dialog [(visible)]="showDialog" header="פרטי הזמנה" [modal]="true" [style]="{width: '600px'}">
+  @if (selectedOrder()) {
+    <div class="dialog-content">
+      <div class="order-summary">
+        <div class="summary-row">
+          <span class="label">מספר הזמנה:</span>
+          <span class="value">#{{ selectedOrder().id }}</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">תאריך הזמנה:</span>
+          <span class="value">{{ selectedOrder().orderDate | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">תאריך אירוע:</span>
+          <span class="value">{{ selectedOrder().eventDate | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">סטטוס:</span>
+          <p-tag [value]="selectedOrder().statusName" [severity]="getSeverity(selectedOrder().statusName)"></p-tag>
+        </div>
+      </div>
+
+      <div class="items-section">
+        <h4>פריטים בהזמנה</h4>
+        <div class="items-list">
+          @for (item of selectedOrder().orderItems; track item.dressId) {
+            <div class="item-row">
+              <div class="item-image">
+                <img [src]="item.modelImgUrl || 'assets/images/placeholder-dress.png'" alt="{{ item.modelName }}" (error)="onOrderImageError($event)">
+              </div>
+              <span class="item-name">{{ item.modelName }}</span>
+              @if (item.size) {
+                <span class="item-size">מידה: {{ item.size }}</span>
+              }
+              <span class="item-code">#{{ item.dressId }}</span>
+              <span class="item-price">{{ item.dressPrice }} ₪</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      @if (selectedOrder().note) {
+        <div class="note-section">
+          <h4><i class="pi pi-comment"></i> הערה</h4>
+          <p>{{ selectedOrder().note }}</p>
+        </div>
+      }
+
+      <div class="total-section">
+        <span>סה"כ לתשלום:</span>
+        <strong>{{ selectedOrder().finalPrice }} ₪</strong>
+      </div>
+    </div>
+  }
+</p-dialog>

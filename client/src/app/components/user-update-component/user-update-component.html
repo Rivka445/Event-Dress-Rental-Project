@@ -1,0 +1,56 @@
+
+<div class="update-container">
+  <p-card header="עדכון פרטים אישיים">
+    <form (ngSubmit)="onSubmit()" #updateForm="ngForm">
+      <div class="field">
+        <label for="firstName">שם פרטי</label>
+        <input pInputText id="firstName" [(ngModel)]="user.firstName" name="firstName" required (blur)="formTouched.set(true)" />
+        @if (formTouched() && !isNameValid(user.firstName)) {
+          <small class="field-error">נא להזין שם פרטי תקין</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="lastName">שם משפחה</label>
+        <input pInputText id="lastName" [(ngModel)]="user.lastName" name="lastName" required (blur)="formTouched.set(true)" />
+        @if (formTouched() && !isNameValid(user.lastName)) {
+          <small class="field-error">נא להזין שם משפחה תקין</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="email">אימייל</label>
+        <input pInputText id="email" type="email" [(ngModel)]="user.email" name="email" (blur)="formTouched.set(true)" />
+        @if (formTouched() && !isEmailValid()) {
+          <small class="field-error">כתובת אימייל לא תקינה</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="phone">טלפון</label>
+        <input pInputText id="phone" [(ngModel)]="user.phone" name="phone" required (blur)="formTouched.set(true)" />
+        @if (formTouched() && !isPhoneValid()) {
+          <small class="field-error">מספר טלפון לא תקין</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="password">סיסמה</label>
+        <p-password [(ngModel)]="user.password" name="password" [feedback]="true" required (onBlur)="formTouched.set(true)"></p-password>
+        @if (formTouched() && !isPasswordValid()) {
+          <small class="field-error">הסיסמה חייבת להכיל לפחות 6 תווים</small>
+        }
+      </div>
+
+      @if (errorMessage()) {
+        <div class="error-message">{{ errorMessage() }}</div>
+      }
+
+      @if (successMessage()) {
+        <div class="success-message">{{ successMessage() }}</div>
+      }
+
+      <p-button type="submit" label="עדכן פרטים" [loading]="loading()" [disabled]="!updateForm.valid"></p-button>
+    </form>
+  </p-card>
+</div>

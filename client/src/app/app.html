@@ -1,0 +1,22 @@
+<app-header></app-header>
+
+<p-drawer 
+  [visible]="cartService.isCartOpen()" 
+  (visibleChange)="cartService.isCartOpen.set($event)"
+  position="left" 
+  [style]="{'width': '400px'}"
+  header="">
+  
+  <app-cart></app-cart>
+  
+</p-drawer>
+
+<router-outlet></router-outlet>
+
+@if (alertService.message()) {
+  <div class="global-alert" [class.error]="alertService.type() === 'error'">
+    <i class="pi" [class.pi-exclamation-circle]="alertService.type() === 'error'" [class.pi-info-circle]="alertService.type() !== 'error'"></i>
+    <span>{{ alertService.message() }}</span>
+  </div>
+}
+<app-footer></app-footer>

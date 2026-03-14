@@ -1,0 +1,91 @@
+.cart-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0; // המגירה כבר נותנת ריפוד
+  box-shadow: none; // אין צורך בצל בתוך מגירה
+
+  .cart-items-list {
+    flex: 1; // נותן לרשימה לתפוס את כל הגובה הפנוי
+    overflow-y: auto; // מוסיף גלילה רק לרשימת הפריטים
+    padding: 0.625rem;
+  }
+}
+
+.cart-footer {
+  border-top: 0.0625rem solid #eee;
+  padding: 1.25rem;
+  background: #f9f9f9;
+}
+
+.global-alert {
+  position: fixed;
+  top: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #6b5b5e;
+  color: #ffffff;
+  padding: 0.9rem 1.4rem;
+  border-radius: 0.35rem;
+  box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  animation: globalAlertSlide 0.25s ease;
+
+  &.error {
+    background: #8f7a7d;
+  }
+
+  i {
+    font-size: 1.1rem;
+  }
+}
+
+@keyframes globalAlertSlide {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -0.6rem);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+/* עיצוב המעטפת של PrimeNG */
+::ng-deep {
+  .p-drawer {
+    /* עיצוב ה-Header וה-X הבהיר */
+    .p-drawer-header {
+      flex-direction: row-reverse !important; // X משמאל
+      padding: 1.2rem 1.5rem !important;
+      border-bottom: 0.0625rem solid #f8f1f2 !important;
+
+      .p-drawer-close-button {
+        background: #f8f1f2 !important; // עיגול ורוד-בהיר עדין
+        color: #6b5b5e !important;
+  width: 2.125rem !important;
+  height: 2.125rem !important;
+        border-radius: 50% !important;
+        border: none !important;
+        
+        &:hover { background: #efe4e4 !important; }
+      }
+
+      .p-drawer-title {
+        font-weight: 300 !important;
+        color: #6b5b5e !important;
+        font-size: 1.3rem !important;
+      }
+    }
+    
+    /* ביטול גלילה מיותרת של המגירה עצמה כדי שהקומפוננטה תשלוט */
+    .p-drawer-content {
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+  }
+}

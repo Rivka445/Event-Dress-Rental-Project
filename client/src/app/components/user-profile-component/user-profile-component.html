@@ -1,0 +1,116 @@
+<div class="profile-container">
+  @if (currentUser()) {
+    <div class="profile-header">
+      <div class="user-avatar">
+        <i class="pi pi-user"></i>
+      </div>
+      <div class="user-info">
+        <h1>{{ isAdmin() ? 'שלום מנהל' : 'שלום' }}, {{ currentUser()?.firstName }}!</h1>
+        <p>{{ isAdmin() ? 'ניהול הפרטים האישיים שלך' : 'שמחים לראות אותך באיזור האישי' }}</p>
+      </div>
+    </div>
+
+    <div class="profile-content">
+      <div class="info-card">
+        <h3><i class="pi pi-user"></i> פרטים אישיים</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">שם פרטי:</span>
+            <span class="value">{{ currentUser()?.firstName }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">שם משפחה:</span>
+            <span class="value">{{ currentUser()?.lastName }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">אימייל:</span>
+            <span class="value">{{ currentUser()?.email || 'לא צוין' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">טלפון:</span>
+            <span class="value">{{ currentUser()?.phone }}</span>
+          </div>
+        </div>
+        <button class="edit-btn" (click)="navigateToUpdate()">
+          <i class="pi pi-pencil"></i>
+          ערוך פרטים
+        </button>
+      </div>
+
+      <div class="quick-actions" *ngIf="!isAdmin()">
+        <div class="action-card" (click)="navigateToOrders()">
+          <i class="pi pi-shopping-bag"></i>
+          <h4>ההזמנות שלי</h4>
+          <p>צפה בהיסטוריית ההזמנות</p>
+        </div>
+        <div class="action-card" (click)="navigateToCart()">
+          <i class="pi pi-shopping-cart"></i>
+          <h4>עגלת קניות</h4>
+          <p>סיים את הרכישה שלך</p>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+@if (showSuccessAlert) {
+  <div class="success-alert">
+    <i class="pi pi-check-circle"></i>
+    <span>הפרטים עודכנו בהצלחה</span>
+  </div>
+}
+
+<p-dialog [(visible)]="showUpdateDialog" header="עדכון פרטים" [modal]="true" [style]="{width: '500px'}">
+  @if (editUser) {
+    <div class="update-form">
+      @if (errorMessage) {
+        <div class="error-message">{{ errorMessage }}</div>
+      }
+
+      <div class="field">
+        <label>שם פרטי</label>
+        <input pInputText [(ngModel)]="editUser.firstName" (blur)="formTouched = true" />
+        @if (formTouched && !isNameValid(editUser.firstName)) {
+          <small class="field-error">נא להזין שם פרטי תקין</small>
+        }
+      </div>
+
+      <div class="field">
+        <label>שם משפחה</label>
+        <input pInputText [(ngModel)]="editUser.lastName" (blur)="formTouched = true" />
+        @if (formTouched && !isNameValid(editUser.lastName)) {
+          <small class="field-error">נא להזין שם משפחה תקין</small>
+        }
+      </div>
+
+      <div class="field">
+        <label>אימייל</label>
+        <input pInputText [(ngModel)]="editUser.email" type="email" (blur)="formTouched = true" />
+        @if (formTouched && !isEmailValid()) {
+          <small class="field-error">נא להזין אימייל תקין</small>
+        }
+      </div>
+
+      <div class="field">
+        <label>טלפון</label>
+        <input pInputText [(ngModel)]="editUser.phone" (blur)="formTouched = true" />
+        @if (formTouched && !isPhoneValid()) {
+          <small class="field-error">מספר טלפון חייב להתחיל ב־05 ולהכיל 10 ספרות</small>
+        }
+      </div>
+
+      <div class="field">
+        <label>סיסמה חדשה (אופציונלי)</label>
+        <p-password [(ngModel)]="editUser.password" [feedback]="false" [toggleMask]="true" (onBlur)="formTouched = true"></p-password>
+        @if (formTouched && !isPasswordValidOptional()) {
+          <small class="field-error">סיסמה חייבת להכיל לפחות 6 תווים</small>
+        }
+      </div>
+    </div>
+
+    <div class="dialog-footer">
+      <p-button label="ביטול" severity="secondary" (onClick)="closeDialog()"></p-button>
+      <p-button label="שמירה" (onClick)="updateProfile()"></p-button>
+    </div>
+  }
+</p-dialog>

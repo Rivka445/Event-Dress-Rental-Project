@@ -1,0 +1,323 @@
+@use "sass:color";
+$main-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+$main-color: #6b5b5e;
+$accent-color: #d4c5c7;
+$light-pink: #f8f1f2;
+$bg-color: #f4eeee;
+
+.profile-container {
+  font-family: $main-font;
+  background-color: #fafafa;
+  padding: 3rem 2rem;
+  direction: rtl;
+  color: $main-color;
+  min-height: 100vh;
+  max-width: 75rem;
+  margin: 0 auto;
+
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: white;
+  border-radius: 1rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+
+    .user-avatar {
+      width: 5rem;
+      height: 5rem;
+      background: $main-color;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      i {
+        font-size: 2.5rem;
+        color: white;
+      }
+    }
+
+    .user-info {
+      flex: 1;
+      text-align: right;
+
+      h1 {
+        margin: 0 0 0.5rem 0;
+        font-size: 2rem;
+        font-weight: 600;
+        color: $main-color;
+      }
+
+      p {
+        margin: 0;
+        color: #666;
+      }
+    }
+  }
+
+  .profile-content {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .info-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+
+    h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0 0 1.5rem 0;
+      color: $main-color;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+
+      .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        text-align: right;
+
+        .label {
+          font-size: 0.85rem;
+          color: #999;
+        }
+
+        .value {
+          font-size: 1rem;
+          font-weight: 500;
+          color: $main-color;
+        }
+      }
+    }
+
+    .edit-btn {
+      width: 100%;
+      padding: 1rem;
+      background: $main-color;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      transition: background 0.2s;
+
+      &:hover {
+        background: darken($main-color, 10%);
+      }
+    }
+  }
+
+  .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+
+    .action-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+
+      &:hover {
+        transform: translateY(-0.25rem);
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+
+        i {
+          transform: scale(1.1);
+        }
+      }
+
+      i {
+        font-size: 3rem;
+        color: $main-color;
+        margin-bottom: 1rem;
+        transition: transform 0.3s;
+      }
+
+      h4 {
+        margin: 0 0 0.5rem 0;
+        color: $main-color;
+        font-weight: 600;
+      }
+
+      p {
+        margin: 0;
+        color: #666;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .p-dialog {
+    direction: rtl;
+    border-radius: 1.25rem;
+    font-family: $main-font;
+
+    .p-dialog-header {
+      background: $light-pink;
+      border-radius: 1.25rem 1.25rem 0 0;
+      padding: 1.5rem;
+
+      h3 {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 400;
+        color: $main-color;
+      }
+    }
+
+    .p-dialog-content {
+      padding: 2rem;
+    }
+  }
+
+  .update-form {
+    .field {
+      margin-bottom: 1.5rem;
+      text-align: right;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        font-size: 0.9rem;
+        color: $main-color;
+      }
+
+      input,
+      .p-password {
+        width: 100%;
+        font-size: 0.9rem;
+        font-family: $main-font;
+        border-radius: 0.625rem;
+        border: 0.0625rem solid $accent-color;
+      }
+
+      .field-error {
+        display: block;
+        margin-top: 0.4rem;
+        color: #b14a4a;
+        font-size: 0.8rem;
+      }
+    }
+
+    .error-message {
+      color: #c44545;
+      margin-bottom: 1rem;
+      padding: 0.8rem;
+      background-color: #fbf3f3;
+      border: 0.0625rem solid #e2bcbc;
+      border-radius: 0.75rem;
+      text-align: right;
+      font-size: 0.9rem;
+    }
+  }
+
+  .success-alert {
+    position: fixed;
+    top: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+
+    background: linear-gradient(135deg, #6b5b5e 0%, #8b7a7e 100%);
+    color: #ffffff;
+    padding: 1.5rem 3rem;
+    border-radius: 1rem;
+    box-shadow: 0 0.625rem 2.5rem rgba(107, 91, 94, 0.35);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    min-width: 25rem;
+    justify-content: center;
+    animation: slideDown 0.4s ease-out, slideUp 0.4s ease-in 1.6s forwards;
+
+    i {
+      font-size: 2rem;
+      animation: checkBounce 0.6s ease-out;
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -100%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+    to {
+      opacity: 0;
+      transform: translate(-50%, -100%);
+    }
+  }
+
+  @keyframes checkBounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
+  .dialog-footer {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+
+    .p-button {
+      font-family: $main-font !important;
+      border-radius: 0.625rem !important;
+      padding: 0.7rem 1.4rem !important;
+      font-size: 0.9rem !important;
+    }
+
+    .p-button-secondary {
+      background: transparent !important;
+      border: 0.0625rem solid $accent-color !important;
+      color: $main-color !important;
+
+      &:hover {
+        background: $light-pink !important;
+      }
+    }
+  }
+}

@@ -1,0 +1,154 @@
+<div class="model-page">
+  @if (model) {
+    <div class="model-details">
+
+      <div class="image-section">
+        <img [src]="model.imgUrl"
+             [alt]="model.name"
+             class="model-image"
+             (error)="onImageError($event)">
+      </div>
+
+      <div class="info-section">
+        <h1 class="model-title">{{ model.name }}</h1>
+        <p class="model-description">{{ model.description }}</p>
+
+        <div class="details-grid">
+          <p><strong>מחיר:</strong> {{ model.basePrice }} ₪</p>
+          <p><strong>צבע:</strong> {{ model.color }}</p>
+        </div>
+
+        <div class="divider"></div>
+
+        @if (userService.isAdmin()) {
+          <div class="admin-notice">
+            <i class="pi pi-info-circle"></i>
+            <p>כמנהל, אינך יכול להוסיף פריטים לסל</p>
+          </div>
+          
+          <div class="selection-step">
+            <label class="form-label">מידות זמינות:</label>
+            <div class="sizes-display">
+              @for (size of sizes; track size) {
+                <span class="size-badge">{{ size }}</span>
+              }
+            </div>
+          </div>
+        } @else {
+
+        <div class="selection-step">
+          <label class="form-label">לבחירת מידה:</label>
+          <div class="sizes-display">
+            @for (size of sizes; track size) {
+              <span class="size-badge" 
+                    [class.selected]="selectedSize === size"
+                    (click)="selectSize(size)">
+                {{ size }}
+              </span>
+            }
+          </div>
+        </div>
+
+        @if (selectedSize) {
+          <div class="selection-step date-selection-row">
+            
+            @if (cartService.draftOrders().length > 0) {
+              <div class="existing-date-col">
+                <label class="form-label">הוסיפי להזמנה קיימת:</label>
+                <p-select 
+                  [options]="cartService.draftOrders()" 
+                  [(ngModel)]="selectedDate"
+                  optionLabel="eventDate" 
+                  optionValue="eventDate"
+                  placeholder="בחרי מתוך הסל"
+                  (onChange)="onDateSelect()"
+                  [style]="{'width':'100%'}">
+                  <ng-template let-draft pTemplate="selectedItem">
+                    {{ draft.eventDate | date:'dd/MM/yyyy' }}
+                  </ng-template>
+                  <ng-template let-draft pTemplate="item">
+                    {{ draft.eventDate | date:'dd/MM/yyyy' }}
+                  </ng-template>
+                </p-select>
+              </div>
+            }
+
+            <div class="date-picker-col">
+              <label class="form-label">או בחרי תאריך חדש:</label>
+              <p-datepicker
+                [(ngModel)]="selectedDate"
+                [minDate]="minDate"
+                (onSelect)="onDateSelect()"
+                dateFormat="dd/mm/yy"
+                placeholder="לבחירת תאריך"
+                [style]="{'width':'100%'}"
+                [showIcon]="true">
+              </p-datepicker>
+            </div>
+          </div>
+        }
+
+        @if (selectedDate) {
+          <div class="actions-section">
+            
+            <p-button
+              label="לבדיקת זמינות"
+              icon="pi pi-search"
+              (onClick)="checkAvailability()"
+              [loading]="loadingAvailability"
+              severity="secondary"
+              styleClass="w-full action-btn">
+            </p-button>
+
+            <div class="status-messages">
+              @if (conflictMessage) {
+                <div class="availability-card error">
+                  <i class="pi pi-exclamation-triangle"></i>
+                  <span class="status-text">{{ conflictMessage }}</span>
+                </div>
+              } @else if (infoMessage) {
+                <div class="availability-card info">
+                  <i class="pi pi-info-circle"></i>
+                  <span class="status-text">{{ infoMessage }}</span>
+                </div>
+              } @else {
+                @if (invalidDate) {
+                  <div class="availability-card error">
+                    <i class="pi pi-exclamation-circle"></i>
+                    <span class="status-text">לא ניתן לבחור תאריך שעבר</span>
+                  </div>
+                }
+
+                @if (isAvailable) {
+                  <div class="availability-card success">
+                    <i class="pi pi-check-circle"></i>
+                    <span class="status-text">השמלה פנויה בתאריך זה!</span>
+                    
+                    <p-button
+                      label="הוספה לסל"
+                      icon="pi pi-shopping-bag"
+                      (onClick)="addToCart()"
+                      severity="success"
+                      styleClass="w-full action-btn add-to-cart-animate">
+                    </p-button>
+                  </div>
+                }
+
+                @if (!isAvailable && availabilityChecked && !invalidDate) {
+                  <div class="availability-card error">
+                    <i class="pi pi-times-circle"></i>
+                    <span class="status-text">התאריך שנבחר תפוס :(</span>
+                  </div>
+                }
+              }
+            </div>
+
+          </div>
+        }
+
+        }
+
+      </div>
+    </div>
+  }
+</div>

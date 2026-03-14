@@ -1,0 +1,91 @@
+@use "sass:color";
+$main-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+$main-color: #6b5b5e;
+$accent-color: #d4c5c7;
+$light-pink: #f8f1f2;
+$bg-color: #f4eeee;
+
+.update-container {
+  font-family: $main-font;
+  background-color: #fafafa;
+  padding: 2rem;
+  direction: rtl;
+  color: $main-color;
+  min-height: 100vh;
+
+  ::ng-deep .p-card {
+    max-width: 43.75rem;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 1.5rem;
+    box-shadow: 0 0.9375rem 2.5rem rgba(0, 0, 0, 0.04);
+    border: none;
+    padding: 2rem;
+  }
+
+  .field {
+    margin-bottom: 1.5rem;
+    text-align: right;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: $main-color;
+    }
+
+    ::ng-deep input,
+    ::ng-deep .p-password {
+      width: 100%;
+      font-size: 0.9rem;
+      font-family: $main-font;
+      border-radius: 0.625rem;
+      border: 0.0625rem solid $accent-color;
+    }
+
+    .field-error {
+      display: block;
+      margin-top: 0.4rem;
+      color: #c44545;
+      font-size: 0.85rem;
+    }
+  }
+
+  .error-message {
+    color: #c44545;
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    background-color: #fbf3f3;
+    border: 0.0625rem solid #e2bcbc;
+    border-radius: 0.75rem;
+    text-align: right;
+    font-size: 0.9rem;
+  }
+
+  .success-message {
+    color: #6b5b5e;
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    background-color: #f6f1f2;
+    border: 0.0625rem solid #dac8cc;
+    border-radius: 0.75rem;
+    text-align: right;
+    font-size: 0.9rem;
+  }
+
+  ::ng-deep .p-button {
+    width: 100%;
+    font-family: $main-font !important;
+    background: $main-color !important;
+    border: 0.0625rem solid $main-color !important;
+    color: #ffffff !important;
+    border-radius: 0.75rem !important;
+    padding: 0.7rem 1.4rem !important;
+    font-size: 0.9rem !important;
+
+    &:hover {
+      background: color.scale($main-color, $lightness: -10%) !important;
+    }
+  }
+}

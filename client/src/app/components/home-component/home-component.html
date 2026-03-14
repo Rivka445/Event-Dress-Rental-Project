@@ -1,0 +1,99 @@
+<div class="home-container">
+  <section class="hero-section">
+    <div class="hero-content">
+      <span class="sub-title">קולקציית 2026 • מהדורת מדל</span>
+  <h1>אלגנטיות מדויקת, התאמה אישית מושלמת</h1>
+  <p class="hero-main-text">קולקציית שמלות נבחרת לאירועים מיוחדים — קו נקי, נוחות אמיתית ומראה יוקרתי.</p>
+      <p-button label="לצפייה בקולקציית האתר" 
+                icon="pi pi-arrow-left" 
+                iconPos="left" 
+                routerLink="/collection" 
+                severity="secondary" 
+                [raised]="true">
+      </p-button>
+    </div>
+  </section>
+
+  <section class="section-container hero-details">
+    <div class="section-header">
+  <h2>הבחירה המדויקת לרגעים המרגשים שלך</h2>
+  <p>עיצוב על-זמני עם התאמה אישית ושירות מוקפד</p>
+    </div>
+    <div class="hero-details-content">
+      <p class="hero-description">
+  כל שמלה בקולקציה שלנו מעוצבת בקפידה עם תשומת לב לפרטים, התאמה מדויקת ומראה יוקרתי. 
+  לערב גאלה, חתונה או אירוע פרטי — אצלנו תמצאי את השמלה המדויקת עבורך.
+      </p>
+      <p class="hero-cta">דגמים בלעדיים • התאמה אישית • איכות פרימיום בלתי מתפשרת</p>
+    </div>
+  </section>
+
+  <section class="section-container">
+    <div class="section-header">
+      <h2>הקטגוריות שלנו</h2>
+      <div class="header-line"></div>
+    </div>
+    
+    <div class="category-grid">
+      @for (cat of categories(); track cat.id) {
+        <div class="category-item" (click)="navigateToCategory(cat.id)" style="cursor: pointer;">
+          <div class="category-image-wrapper">
+            <img [src]="categoryImages[cat.id] || '/assets/default-cat.png'" [alt]="cat.name">
+            <div class="category-overlay">
+              <div class="category-content">
+                <span class="category-label">קטגוריה</span>
+                <h3>{{ cat.name }}</h3>
+                <p class="category-description">{{ cat.description }}</p>
+                <span class="category-cta">צפי בדגמים →</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="section-container testimonials-section">
+    <div class="section-header">
+  <h2>מה הלקוחות מספרות</h2>
+  <p>חוויות אמת עם שירות אישי ורמת גימור גבוהה</p>
+    </div>
+
+    <div class="testimonials-grid">
+      <article class="testimonial-card">
+  <div class="testimonial-quote">“שירות מקצועי, התאמה מדויקת וחוויה נעימה מהרגע הראשון.”</div>
+  <div class="testimonial-author">שירה מ׳, ירושלים</div>
+  <div class="testimonial-role">בת מצווה • שמלת חגיגה</div>
+      </article>
+
+      <article class="testimonial-card">
+  <div class="testimonial-quote">“מצאתי שמלה יוקרתית עם ליווי אישי מוקפד לכל אורך הדרך.”</div>
+  <div class="testimonial-author">נועה ק׳, תל אביב</div>
+  <div class="testimonial-role">חתונה • התאמה אישית</div>
+      </article>
+
+      <article class="testimonial-card">
+  <div class="testimonial-quote">“הכול היה מדויק ואלגנטי — מהמדידה ועד האיסוף.”</div>
+  <div class="testimonial-author">מיכל ל׳, חיפה</div>
+  <div class="testimonial-role">אירוע ערב • פרימיום</div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section-container bg-soft">
+    <div class="section-header">
+      <h2>הבחירות הפופולריות</h2>
+      <p>הדגמים שכולן אוהבות עכשיו</p>
+    </div>
+    
+    <div class="models-grid">
+      @for (model of popularDresses(); track model.id) {
+        <div class="model-item">
+          <a [routerLink]="['/model', model.id]" class="model-link">
+            <app-model-card-component [model]="model"></app-model-card-component>
+          </a>
+        </div>
+      }
+    </div>
+  </section>
+</div>

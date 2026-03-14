@@ -1,0 +1,65 @@
+<div class="register-container">
+  <div class="register-card">
+    <div class="card-header">
+      <h1>הצטרפו אלינו</h1>
+      <p>צרו חשבון חדש ותתחילו ליהנות</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+      <div class="form-row">
+        <div class="field">
+          <label for="firstName">שם פרטי</label>
+          <input pInputText id="firstName" [(ngModel)]="user.firstName" name="firstName" required placeholder="הזינו שם פרטי" (blur)="formTouched.set(true)" />
+          @if (formTouched() && !isNameValid(user.firstName)) {
+            <small class="field-error">נא להזין שם פרטי תקין</small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="lastName">שם משפחה</label>
+          <input pInputText id="lastName" [(ngModel)]="user.lastName" name="lastName" required placeholder="הזינו שם משפחה" (blur)="formTouched.set(true)" />
+          @if (formTouched() && !isNameValid(user.lastName)) {
+            <small class="field-error">נא להזין שם משפחה תקין</small>
+          }
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">כתובת אימייל</label>
+        <input pInputText id="email" type="email" [(ngModel)]="user.email" name="email" placeholder="example@email.com" (blur)="formTouched.set(true)" />
+        @if (formTouched() && !isEmailValid()) {
+          <small class="field-error">כתובת אימייל לא תקינה</small>
+        }
+      </div>
+
+      <input type="hidden" [ngModel]="user.role" name="role" />
+
+      <div class="field">
+        <label for="phone">מספר טלפון</label>
+        <input pInputText id="phone" [(ngModel)]="user.phone" name="phone" required placeholder="05X-XXXXXXX" (blur)="formTouched.set(true)" />
+        @if (formTouched() && !isPhoneValid()) {
+          <small class="field-error">מספר טלפון לא תקין</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="password">סיסמה</label>
+        <p-password [(ngModel)]="user.password" name="password" [feedback]="true" [toggleMask]="true" [appendTo]="'body'" required placeholder="בחרו סיסמה חזקה" (onBlur)="formTouched.set(true)"></p-password>
+        @if (formTouched() && !isPasswordValid()) {
+          <small class="field-error">הסיסמה חייבת להכיל לפחות 6 תווים</small>
+        }
+      </div>
+
+      <div *ngIf="errorMessage()" class="error-message">
+        <i class="pi pi-exclamation-circle"></i>
+        {{ errorMessage() }}
+      </div>
+
+      <p-button type="submit" label="הרשמה" icon="pi pi-user-plus" [loading]="loading()" [disabled]="!registerForm.valid"></p-button>
+      
+      <div class="login-link">
+        כבר יש לך חשבון? <a routerLink="/login">התחבר כאן</a>
+      </div>
+    </form>
+  </div>
+</div>

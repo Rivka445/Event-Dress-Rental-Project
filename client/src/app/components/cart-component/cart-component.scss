@@ -1,0 +1,286 @@
+@use 'sass:color';
+
+// צבעים וגופנים
+$main-color: #6b5b5e;
+$bg-color: #f5f1f1;
+$white: #ffffff;
+$soft-bg: #fdfdfd;
+$error-color: #cc8888;
+$font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+// Container ראשי
+.cart-container {
+  font-family: $font-family;
+  background: $soft-bg;
+  min-height: 100vh;
+  padding: 2rem;
+  direction: rtl;
+  color: $main-color;
+  display: flex;
+  flex-direction: column;
+
+  * {
+    font-family: inherit;
+  }
+
+  .pi {
+    font-family: 'PrimeIcons' !important;
+    font-style: normal;
+    font-weight: normal;
+  }
+
+  h1 {
+    margin: 0 0 2rem;
+    font-weight: 400;
+    font-size: 1.8rem;
+    border-bottom: 0.0625rem solid color.scale($main-color, $lightness: 80%);
+    padding-bottom: 1rem;
+  }
+}
+
+// Layout
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  flex: 1 1 auto;
+  max-height: calc(100vh - 16rem);
+  overflow-y: auto;
+  padding-inline-end: 0.5rem;
+}
+
+.cart-items::-webkit-scrollbar {
+  width: 0.4rem;
+}
+
+.cart-items::-webkit-scrollbar-thumb {
+  background: color.scale($main-color, $lightness: 40%);
+  border-radius: 1rem;
+}
+
+.cart-items {
+  scrollbar-width: thin;
+  scrollbar-color: color.scale($main-color, $lightness: 40%) transparent;
+}
+
+// Draft Block
+.draft-block {
+  background: $white;
+  border: 0.0625rem solid color.scale($bg-color, $lightness: 20%);
+  border-radius: 0.5rem;
+  padding: 1rem;
+
+  .draft-selection-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: color.scale($bg-color, $lightness: 15%);
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    margin-bottom: 1rem;
+
+    .custom-checkbox {
+      width: 1.2rem;
+      height: 1.2rem;
+      cursor: pointer;
+      accent-color: $main-color;
+    }
+
+    .draft-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .icon-only-btn {
+      margin-right: auto;
+      font-size: 1.1rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: color.scale($main-color, $lightness: -20%);
+      transition: color 0.25s ease;
+
+      &:hover {
+        color: $error-color;
+      }
+
+      i {
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+// פריטי סל
+.cart-item-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 0.0625rem solid color.scale($bg-color, $lightness: 50%);
+  animation: none;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .item-img img {
+    width: 4rem;
+    height: 5rem;
+    object-fit: cover;
+    border-radius: 0.25rem;
+  }
+
+  .item-info {
+    flex: 1;
+
+    h4 {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 400;
+    }
+
+    .size-label {
+      font-size: 0.8rem;
+      color: color.scale($main-color, $lightness: 50%);
+      margin-top: 0.25rem;
+    }
+  }
+
+  .price {
+    font-weight: 500;
+    font-size: 1rem;
+  }
+
+  .remove-item-btn {
+    font-size: 1.1rem;
+    color: color.scale($main-color, $lightness: -20%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+
+    i {
+      color: inherit;
+      font-size: 1.1rem;
+      display: inline-block;
+    }
+
+    &:hover {
+      color: $error-color;
+    }
+  }
+}
+
+.cart-item-row.slide-in {
+  animation: cartSlideIn 0.5s ease-out;
+}
+
+.draft-subtotal {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.cart-summary {
+  background: $white;
+  border: 0.0625rem solid color.scale($bg-color, $lightness: 20%);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  position: static;
+
+  .summary-title {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+    border-top: 0.0625rem solid color.scale($bg-color, $lightness: 50%);
+  }
+
+  .checkout-btn {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1rem;
+    background: $main-color;
+    color: $white;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: color.scale($main-color, $lightness: -10%);
+      box-shadow: 0 0.25rem 0.75rem rgba($main-color, 0.2);
+    }
+  }
+}
+
+.custom-alert {
+  position: fixed;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: $main-color;
+  color: $white;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 0.9375rem rgba(0,0,0,0.2);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  animation: slideInAndOut 2s ease-in-out forwards;
+
+  &.error {
+    background: $error-color;
+  }
+}
+
+@keyframes slideInAndOut {
+  0% { opacity: 0; transform: translate(-50%, -1.25rem); }
+  15% { opacity: 1; transform: translate(-50%, 0); }
+  75% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -1.25rem); }
+}
+
+@keyframes cartSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-1.25rem) scale(0.98);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(0.2rem) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
