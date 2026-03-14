@@ -1,0 +1,51 @@
+﻿using Entities;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Services;
+using System.Threading.Tasks;
+
+namespace EventDressRental.Middleware
+{
+    // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
+    public class RatingMiddleware
+    {
+        private readonly RequestDelegate _next;
+        private readonly ILogger _logger;
+
+        public RatingMiddleware(RequestDelegate next, ILogger<RatingMiddleware> logger)
+        {
+            _next = next;
+            _logger = logger;
+        }
+
+        public async Task Invoke(HttpContext httpContext, IRatingService ratingService)
+        {
+            try
+            {
+                Rating rating = new Rating();
+                rating.Host = httpContext.Request.Host.Value;
+                rating.Method = httpContext.Request.Method;
+                rating.Path = httpContext.Request.Path;
+                rating.Referer = httpContext.Request.Headers.Referer;
+                rating.UserAgent = httpContext.Request.Headers.UserAgent;
+                rating.RecordDate = DateTime.Now;
+                await ratingService.Add(rating);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Rating middleware failed to log request.");
+            }
+            await _next(httpContext);
+        }
+    }
+
+    // Extension method used to add the middleware to the HTTP request pipeline.
+    public static class RatingMiddlewareExtensions
+    {
+        public static IApplicationBuilder UseRating(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<RatingMiddleware>();
+        }
+    }
+}
