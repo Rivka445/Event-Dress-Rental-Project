@@ -133,7 +133,7 @@ dotnet test server/Tests/Tests.csproj
 
 ## 📫 Contact
 
-נבנה על ידי **[השם שלך]**
+נבנה על ידי **Rivka445**
 
 * פתיחת Issues לשיפורים / באגים
 * Pull Requests מתקבלים
