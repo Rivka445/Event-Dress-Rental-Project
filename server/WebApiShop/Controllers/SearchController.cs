@@ -21,6 +21,10 @@ namespace EventDressRental.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] SearchQuery req)
         {
+            if (string.IsNullOrWhiteSpace(req.Query))
+                return BadRequest("Query cannot be empty");
+            if (req.Query.Length > 500)
+                return BadRequest("Query too long");
             var productList = await GetProductListAsync();
 
             var res = await _http.PostAsJsonAsync(
@@ -37,7 +41,7 @@ namespace EventDressRental.Controllers
             if (cached != null)
                 return JsonSerializer.Deserialize<List<object>>(cached)!;
 
-            var modelsResult = await _products.GetModelds(null, null, null, [], [], 1, 100);
+            var modelsResult = await _products.GetModelds(null, null, null, [], [], 1, 50);
             var productList = modelsResult.Items.Select(m => (object)new
             {
                 m.Id, m.Name, m.Color, m.Description, m.BasePrice, m.IsActive, m.ImgUrl

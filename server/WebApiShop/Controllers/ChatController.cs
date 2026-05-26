@@ -25,6 +25,10 @@ namespace EventDressRental.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ChatRequest req)
         {
+            if (string.IsNullOrWhiteSpace(req.Message))
+                return BadRequest("Message cannot be empty");
+            if (req.Message.Length > 1000)
+                return BadRequest("Message too long");
             var productList = await GetProductListAsync();
 
             var payload = new
