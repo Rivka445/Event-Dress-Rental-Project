@@ -1,34 +1,35 @@
 # Event Dress Rental
 
-מערכת להשכרת שמלות לאירועים — Angular frontend + ASP.NET Core Web API backend + Python AI service.
+A dress rental platform for events — Angular frontend + ASP.NET Core Web API backend + Python AI service.
 
 ---
 
-## טכנולוגיות
+## Tech Stack
 
-| שכבה | טכנולוגיה |
-|------|-----------|
+| Layer | Technology |
+|-------|-----------|
 | Frontend | Angular 21 (standalone components, PrimeNG) |
 | Backend | ASP.NET Core Web API (.NET 9) |
 | ORM | Entity Framework Core (Database-First) |
 | DB | Microsoft SQL Server |
 | Cache | Redis (Docker) |
 | AI Service | Python (FastAPI) — `localhost:8001` |
+| Auth | JWT Bearer tokens |
 | Logging | NLog |
 | Tests | xUnit + Moq |
 
 ---
 
-## מבנה הפרויקט
+## Project Structure
 
 ```
 PROJECT!/
 ├── Client/                  # Angular app
 │   └── src/app/
 │       ├── components/
-│       │   ├── chat-component/        # AI chatbot
-│       │   ├── filter-bar-component/  # סינון + חיפוש סמנטי
-│       │   └── list-models-component/ # גריד שמלות + תוצאות חיפוש
+│       │   ├── chat-component/        # AI chatbot widget
+│       │   ├── filter-bar-component/  # Filters + semantic search
+│       │   └── list-models-component/ # Dress grid + search results
 │       └── services/
 │           ├── chat-service.ts        # POST /api/Chat
 │           └── search-service.ts      # POST /api/Search
@@ -43,25 +44,27 @@ PROJECT!/
 
 ---
 
-## הפעלה מקומית
+## Running Locally
 
 ### 1. Redis (Docker)
 ```bash
 cd server/WebApiShop
 docker-compose up -d
 ```
+Redis runs on `localhost:6379` with password `YourStrongPassword123` (change before production).
 
 ### 2. Python AI Service
 ```bash
-# נדרש להיות רץ על localhost:8001
-# endpoints: POST /chat, POST /search
+# Must be running on localhost:8001
+# Required endpoints: POST /chat, POST /search
 ```
 
 ### 3. Backend
 ```bash
 cd server/WebApiShop
 dotnet run
-# רץ על https://localhost:44362
+# Runs on https://localhost:44362
+# Swagger UI available at https://localhost:44362 (Development only)
 ```
 
 ### 4. Frontend
@@ -69,49 +72,118 @@ dotnet run
 cd Client
 npm install
 npm start
-# רץ על http://localhost:4200
+# Runs on http://localhost:4200
+# Proxies /api → https://localhost:44362 via proxy.conf.json
 ```
 
 ---
 
-## פיצ'רים
+## Configuration — appsettings.json
 
-### AI Chatbot
-- כפתור צ'אט קבוע בפינה — נפתח כחלון שיחה
-- שולח הודעה + היסטוריה + רשימת מוצרים מה-DB ל-Python AI
-- רשימת המוצרים נשמרת ב-Redis (TTL שעה) — DB נשאל פעם אחת בלבד
-- עיצוב בסגנון האתר: צבע `#6b5b5e`, RTL, אנימציית typing
+```json
+{
+  "TokenKey": "<your-jwt-secret-key>",
+  "ConnectionStrings": {
+    "Home": "<sql-server-connection-string>",
+    "Redis": "localhost:6379,password=YourStrongPassword123"
+  },
+  "RedisCacheOptions": {
+    "TTL_In_Seconds": 3600
+  }
+}
+```
 
-**זרימה:**
-```
-Angular → POST /api/Chat → .NET (מוסיף products מ-Redis/DB) → Python /chat → תשובה
-```
+---
 
-### חיפוש סמנטי
-- שדה חיפוש בסרגל הסינון — מופעל עם Enter או "החל סינון"
-- שולח שאילתה + רשימת מוצרים ל-Python AI לחיפוש וקטורי
-- תוצאות מוצגות כאותם כרטיסי מוצר בגריד
-- איפוס חיפוש מחזיר לרשימה הרגילה
-- רשימת המוצרים נשמרת ב-Redis (אותו cache key עם ChatController)
+## Authentication — JWT
 
-**זרימה:**
-```
-Angular → POST /api/Search → .NET (מוסיף products מ-Redis/DB) → Python /search → כרטיסים
-```
+- All protected endpoints require `Authorization: Bearer <token>` header
+- Token is signed with `TokenKey` from `appsettings.json`
+- Issued by `TokenService` on login/register
+- Swagger UI supports Bearer token input for testing
 
 ---
 
 ## Redis Cache
 
-- מוגדר ב-`docker-compose.yml` עם סיסמה
-- `appsettings.json` → `ConnectionStrings.Redis`
-- `ChatController` ו-`SearchController` משתמשים באותו cache key: `product_list`
-- TTL: שעה אחת
+- Configured in `docker-compose.yml` — runs as a Docker container on port `6379`
+- Password set via `--requirepass` in docker-compose and matched in `appsettings.json`
+- `ChatController` and `SearchController` share cache key: `product_list`
+- TTL: 1 hour — DB is queried only on first request, all subsequent requests served from cache
+- Product list capped at 50 items to keep AI payload small
 
 ---
 
-## הוראות לסוכן קוד
+## Rate Limiting
 
-ראה `.github/INSTRUCTION.md` לסיכום כללי.
-ראה `.github/INSTRUCTION_CONTROLLERS.md` לפרטים על Controllers.
-ראה `.github/INSTRUCTION_REPOSITORIES.md` לפרטים על Repositories.
+- Policy: `PerIpPolicy` — Token Bucket per IP address
+- Limit: 60 tokens, refill 1 token/second, queue up to 10 requests
+- Exceeded requests → `429 Too Many Requests` with `Retry-After: 5` header
+
+---
+
+## CORS
+
+- Allowed origin: `http://localhost:4200` (Angular dev server)
+- Update to your production domain before going live
+
+---
+
+## Middleware Pipeline (in order)
+
+1. HTTPS Redirection
+2. CORS
+3. Error Handling (global exception middleware)
+4. Rating Middleware
+5. Static Files
+6. Authentication
+7. Authorization
+8. Controllers
+
+---
+
+## Features
+
+### AI Chatbot
+- Chat button fixed on every page (`<app-chat>` in `app.html`)
+- Sends message + conversation history + real product list from DB to Python AI
+- Product list served from Redis cache — DB queried only once per hour
+- Validation: empty message → 400, message over 1000 chars → 400
+- Styled to match the site: color `#6b5b5e`, RTL, typing animation, Hebrew welcome message
+
+**Flow:**
+```
+Angular → POST /api/Chat → .NET (injects products from Redis/DB) → Python /chat → reply
+```
+
+### Semantic Search
+- Search field in the filter bar — triggered only on Enter or "Apply Filters"
+- Sends query + product list to Python AI for vector search
+- Results displayed as product cards in the same grid
+- Clearing search restores the normal product list
+- Validation: empty query → 400, query over 500 chars → 400
+
+**Flow:**
+```
+Angular → POST /api/Search → .NET (injects products from Redis/DB) → Python /search → cards
+```
+
+---
+
+## Before Going Live
+
+| Action | Location |
+|--------|----------|
+| Replace `allow_origins=['*']` with your actual domain | Python AI service |
+| Set system prompt with store-specific rules | Python AI service |
+| Replace `TokenKey` with a strong secret | `appsettings.json` |
+| Update Redis password | `appsettings.json` + `docker-compose.yml` |
+| Update CORS allowed origin | `Program.cs` |
+
+---
+
+## Agent Instructions
+
+See `.github/INSTRUCTION.md` for a general overview.
+See `.github/INSTRUCTION_CONTROLLERS.md` for Controllers guidance.
+See `.github/INSTRUCTION_REPOSITORIES.md` for Repositories guidance.
