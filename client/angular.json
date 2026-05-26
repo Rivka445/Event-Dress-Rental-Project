@@ -67,7 +67,8 @@
               "buildTarget": "EventDressRentalProject:build:production"
             },
             "development": {
-              "buildTarget": "EventDressRentalProject:build:development"
+              "buildTarget": "EventDressRentalProject:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

@@ -1,6 +1,6 @@
 <div class="dress-list-container">
   <div class="filter-bar-horizontal">
-    <app-filter-bar></app-filter-bar>
+    <app-filter-bar (searchChange)="onSearchChange($event)"></app-filter-bar>
   </div>
   
   <main class="models-content">
