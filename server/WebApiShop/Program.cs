@@ -42,6 +42,8 @@ builder.Services.AddScoped<IRatingService, RatingService>();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddDbContext<EventDressRentalContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Home")));
 

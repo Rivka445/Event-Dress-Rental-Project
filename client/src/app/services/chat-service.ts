@@ -1,15 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   send(message: string, history: {role:string, content:string}[]) {
-    return this.http.post<{reply: string}>('/api/chat', {
-      message,
-      history,
-      products: []   
-    });
+    return this.http.post<{reply: string}>('/api/Chat', { message, history });
   }
 }

@@ -24,11 +24,11 @@ export class ChatComponent {
     const msg = this.input;
     this.input = '';
     this.loading = true;
-    this.messages.push({ role: 'user', content: msg });
+    this.messages = [...this.messages, { role: 'user', content: msg }];
 
     this.chatService.send(msg, this.messages.slice(0, -1)).subscribe({
       next: res => {
-        this.messages.push({ role: 'assistant', content: res.reply });
+        this.messages = [...this.messages, { role: 'assistant', content: res.reply }];
         this.loading = false;
       },
       error: () => this.loading = false
