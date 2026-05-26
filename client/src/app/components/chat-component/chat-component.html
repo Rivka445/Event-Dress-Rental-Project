@@ -1,21 +1,31 @@
 
 <button class="chat-toggle" (click)="isOpen = !isOpen">
-  {{ isOpen ? '✕' : '💬' }}
+  <i [class]="isOpen ? 'pi pi-times' : 'pi pi-comments'"></i>
 </button>
 
 <div class="chat-window" *ngIf="isOpen">
-  <div class="chat-header">AI Shopping Assistant</div>
+  <div class="chat-header">
+    <i class="pi pi-sparkles"></i>
+    <span>עוזרת סטיילינג</span>
+  </div>
 
-  <div class="chat-messages">
+  <div class="chat-messages" #messagesContainer>
+    <div class="welcome-msg" *ngIf="messages.length === 0">
+      שלום! אני כאן לעזור לך למצוא את השמלה המושלמת ✨
+    </div>
     <div *ngFor="let m of messages" [class]="'msg ' + m.role">
       {{ m.content }}
     </div>
-    <div *ngIf="loading" class="msg assistant">Typing...</div>
+    <div *ngIf="loading" class="msg assistant typing">
+      <span></span><span></span><span></span>
+    </div>
   </div>
 
   <div class="chat-input">
     <textarea [(ngModel)]="input" (keydown)="onKey($event)"
-              placeholder="Ask about our products..."></textarea>
-    <button (click)="send()" [disabled]="loading">Send</button>
+              placeholder="שאלי אותי על השמלות..."></textarea>
+    <button (click)="send()" [disabled]="loading">
+      <i class="pi pi-send"></i>
+    </button>
   </div>
 </div>

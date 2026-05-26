@@ -1,4 +1,17 @@
 <div class="filter-container">
+  <div class="filter-section search-section">
+    <label>חיפוש חכם</label>
+    <div class="search-wrapper">
+      <i class="pi pi-search search-icon"></i>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (keydown.enter)="onSearch(searchQuery)"
+        placeholder="חפשי שמלה..."
+        class="search-input" />
+    </div>
+  </div>
+
   <div class="filter-section">
     <label>קטגוריות</label>
     <p-multiSelect

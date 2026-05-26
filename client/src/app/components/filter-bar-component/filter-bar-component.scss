@@ -14,6 +14,58 @@
   margin: 0 auto;
 }
 
+.search-section {
+  flex: 1 1 14rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03125rem;
+  }
+
+  .search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .search-icon {
+      position: absolute;
+      right: 0.75rem;
+      color: #9e8c8f;
+      font-size: 0.8rem;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.42rem 2rem 0.42rem 0.75rem;
+      font-size: 0.85rem;
+      font-family: inherit;
+      color: #333;
+      background: #faf8f9;
+      border: 0.0625rem solid #e0d8d9;
+      border-radius: 0.1875rem;
+      outline: none;
+      direction: rtl;
+      transition: border-color 0.2s, box-shadow 0.2s;
+
+      &::placeholder {
+        color: #b0a0a3;
+        font-style: italic;
+      }
+
+      &:focus {
+        border-color: #6b5b5e;
+        box-shadow: 0 0 0 0.125rem rgba(107, 91, 94, 0.15);
+      }
+    }
+  }
+}
+
 .filter-section {
   margin-bottom: 0;
   flex: 0 1 auto;

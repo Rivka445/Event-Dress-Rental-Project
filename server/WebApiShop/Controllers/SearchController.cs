@@ -1,6 +1,6 @@
 ﻿using DTOs;
 using Microsoft.AspNetCore.Mvc;
-+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Distributed;
 using Services;
 using System.Text.Json;
 
@@ -8,38 +8,26 @@ namespace EventDressRental.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ChatController : ControllerBase
+    public class SearchController : ControllerBase
     {
         private readonly HttpClient _http;
-        private readonly IModelService _modelService;
+        private readonly IModelService _products;
         private readonly IDistributedCache _cache;
         private const string CacheKey = "product_list";
 
-        public ChatController(IHttpClientFactory factory, IModelService modelService, IDistributedCache cache)
-        {
-            _http = factory.CreateClient();
-            _modelService = modelService;
-            _cache = cache;
-        }
+        public SearchController(IHttpClientFactory f, IModelService products, IDistributedCache cache)
+        { _http = f.CreateClient(); _products = products; _cache = cache; }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ChatRequest req)
+        public async Task<IActionResult> Post([FromBody] SearchQuery req)
         {
             var productList = await GetProductListAsync();
 
-            var payload = new
-            {
-                message  = req.Message,
-                history  = req.History,
-                products = productList
-            };
+            var res = await _http.PostAsJsonAsync(
+                "http://localhost:8001/search",
+                new { query = req.Query, products = productList, top_k = 5 });
 
-            var res = await _http.PostAsJsonAsync("http://localhost:8001/chat", payload);
-
-            if (!res.IsSuccessStatusCode)
-                return StatusCode(500, "AI service unavailable");
-
-            var data = await res.Content.ReadFromJsonAsync<ChatResponse>();
+            var data = await res.Content.ReadFromJsonAsync<SearchResponse>();
             return Ok(data);
         }
 
@@ -49,7 +37,7 @@ namespace EventDressRental.Controllers
             if (cached != null)
                 return JsonSerializer.Deserialize<List<object>>(cached)!;
 
-            var modelsResult = await _modelService.GetModelds(null, null, null, [], [], 1, 100);
+            var modelsResult = await _products.GetModelds(null, null, null, [], [], 1, 100);
             var productList = modelsResult.Items.Select(m => (object)new
             {
                 m.Id, m.Name, m.Color, m.Description, m.BasePrice, m.IsActive, m.ImgUrl
@@ -65,4 +53,3 @@ namespace EventDressRental.Controllers
         }
     }
 }
-

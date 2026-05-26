@@ -121,6 +121,29 @@ export class ListModelsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  searchActive = false;
+
+  onSearchChange(results: any[]) {
+    if (results.length === 0 && !this.searchActive) return;
+    this.searchActive = results.length > 0;
+    if (this.searchActive) {
+      const mapped = results.map(r => ({
+        id: r.id ?? 0,
+        name: r.name ?? '',
+        description: r.description ?? '',
+        imgUrl: r.imgUrl ?? '',
+        basePrice: r.basePrice ?? 0,
+        color: r.color ?? '',
+        isActive: r.isActive ?? true,
+        categories: r.categories ?? []
+      }));
+      this.models.set(mapped);
+      this.totalRecords.set(mapped.length);
+    } else {
+      this.loadModels();
+    }
+  }
+
   onPageChange(event: any) {
     this.router.navigate([], {
       relativeTo: this.route,

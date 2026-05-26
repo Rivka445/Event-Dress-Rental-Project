@@ -5,12 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CategoryService } from '../../services/category-service';
 import { CategoryModel } from '../../models/category.model';
-import { Router, ActivatedRoute } from '@angular/router'; 
+import { Router, ActivatedRoute } from '@angular/router';
+import { SearchService } from '../../services/search-service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-filter-bar',
   standalone: true,
-  imports: [MultiSelectModule, SliderModule, FormsModule, ButtonModule],
+  imports: [MultiSelectModule, SliderModule, FormsModule, ButtonModule, CommonModule],
   templateUrl: './filter-bar-component.html',
   styleUrls: ['./filter-bar-component.scss'],
 })
@@ -18,8 +20,13 @@ export class FilterBarComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private categoryService = inject(CategoryService);
+  private searchService = inject(SearchService);
 
-  @Output() filterChange = new EventEmitter<any>(); 
+  @Output() filterChange = new EventEmitter<any>();
+  @Output() searchChange = new EventEmitter<any[]>();
+
+  searchQuery = '';
+  searching = false; 
 
   priceRange: number[] = [0, 1000];
   selectedColors: string[] = [];
@@ -62,6 +69,7 @@ export class FilterBarComponent implements OnInit {
   }
 
   applyFilters() {
+    if (this.searchQuery.trim()) this.onSearch(this.searchQuery);
     const currentParams = this.route.snapshot.queryParams;
 
     const resolvedMinPrice = this.priceTouched
@@ -96,7 +104,19 @@ export class FilterBarComponent implements OnInit {
     this.filterChange.emit(queryParams);
   }
 
+  onSearch(query: string) {
+    this.searchQuery = query;
+    if (!query.trim()) { this.searchChange.emit([]); return; }
+    this.searching = true;
+    this.searchService.search(query).subscribe({
+      next: res => { this.searchChange.emit(res.results); this.searching = false; },
+      error: () => this.searching = false
+    });
+  }
+
   resetFilters() {
+    this.searchQuery = '';
+    this.onSearch('');
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { minPrice: null, maxPrice: null, colors: null, categories: null, page:1},
