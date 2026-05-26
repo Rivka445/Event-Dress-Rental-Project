@@ -1,6 +1,6 @@
-﻿using DTOs;
+using DTOs;
 using Microsoft.AspNetCore.Mvc;
-+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Distributed;
 using Services;
 using System.Text.Json;
 
@@ -65,4 +65,3 @@ namespace EventDressRental.Controllers
         }
     }
 }
-

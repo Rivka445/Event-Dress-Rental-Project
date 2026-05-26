@@ -1,139 +1,117 @@
-﻿# 👗 Event Dress Rental Ecosystem
+# Event Dress Rental
 
-### Enterprise-Grade Full-Stack Solution for Fashion Rental Management
-
-[![.NET 9](https://img.shields.io/badge/.NET-9.0-512bd4?logo=dotnet)](https://dotnet.microsoft.com/)
-[![Angular](https://img.shields.io/badge/Angular-v17+-dd0031?logo=angular)](https://angular.io/)
-[![SQL Server](https://img.shields.io/badge/SQL_Server-2022-CC2927?logo=microsoft-sql-server)](https://www.microsoft.com/en-us/sql-server)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+מערכת להשכרת שמלות לאירועים — Angular frontend + ASP.NET Core Web API backend + Python AI service.
 
 ---
 
-## 📌 Overview
+## טכנולוגיות
 
-פתרון Full-Stack מלא לניהול מערכת השכרת שמלות אירועים, הכולל:
-
-* Backend מבוסס **ASP.NET Core 9**
-* Frontend מודרני מבוסס **Angular**
-* ארכיטקטורה מבוססת **DDD + Clean Architecture**
-* דגש על **Scalability, Security, Maintainability**
-
----
-
-## 💎 Technical Highlights
-
-* **Clean Architecture & DDD**
-  חלוקה לשכבות: `Domain`, `Application`, `Infrastructure`
-
-* **Asynchronous Pipeline**
-  שימוש מלא ב־`async/await` לשיפור ביצועים ו־scalability
-
-* **Repository Pattern + EF Core**
-  הפרדת לוגיקה עסקית מגישה לנתונים
-
-* **JWT Authentication**
-  אימות והרשאות מבוססי Roles
-
-* **Logging & Auditing (NLog)**
-  ניטור שגיאות ורישום פעילות בטבלת `Rating`
+| שכבה | טכנולוגיה |
+|------|-----------|
+| Frontend | Angular 21 (standalone components, PrimeNG) |
+| Backend | ASP.NET Core Web API (.NET 9) |
+| ORM | Entity Framework Core (Database-First) |
+| DB | Microsoft SQL Server |
+| Cache | Redis (Docker) |
+| AI Service | Python (FastAPI) — `localhost:8001` |
+| Logging | NLog |
+| Tests | xUnit + Moq |
 
 ---
 
-## 🛠️ Stack & Tools
+## מבנה הפרויקט
 
-### Backend (`server/`)
-
-* **Framework:** ASP.NET Core 9 (Web API)
-* **ORM:** Entity Framework Core (Database First)
-* **Mapping:** AutoMapper
-* **DTOs:** C# Records (Immutable)
-* **Testing:** xUnit, Moq, Integration Tests
-
-### Frontend (`Client/`)
-
-* **Framework:** Angular (SPA)
-* **State Management:** RxJS + Services
-* **Authentication:** HTTP Interceptors (JWT Injection)
-
----
-
-## 📂 Project Structure
-
-```text
-├── 📂 Client/                # Angular SPA
-├── 📂 server/
-│   ├── 📂 WebApiShop/        # Controllers + Middleware
-│   ├── 📂 Services/          # Business Logic
-│   ├── 📂 Repositories/      # Data Access Layer
-│   ├── 📂 Entities/          # EF Core Models
-│   ├── 📂 DTOs/              # Data Transfer Objects
-│   └── 📂 Tests/             # Unit + Integration Tests
+```
+PROJECT!/
+├── Client/                  # Angular app
+│   └── src/app/
+│       ├── components/
+│       │   ├── chat-component/        # AI chatbot
+│       │   ├── filter-bar-component/  # סינון + חיפוש סמנטי
+│       │   └── list-models-component/ # גריד שמלות + תוצאות חיפוש
+│       └── services/
+│           ├── chat-service.ts        # POST /api/Chat
+│           └── search-service.ts      # POST /api/Search
+└── server/
+    ├── WebApiShop/          # API Controllers + Program.cs
+    ├── Services/            # Business logic
+    ├── Repositories/        # EF Core data access
+    ├── Entities/            # DB models
+    ├── DTOs/                # Request/Response shapes
+    └── Tests/               # xUnit + Moq
 ```
 
 ---
 
-## 🔄 Data Flow
+## הפעלה מקומית
 
-```text
-Client (Angular)
-   ➔ Controllers (API)
-      ➔ Services (Business Logic)
-         ➔ Repositories (Data Access)
-            ➔ SQL Server
-```
-
----
-
-## 📊 Database Schema
-
-ישויות מרכזיות:
-
-* **Users** – ניהול משתמשים והרשאות
-* **Categories & Models** – קטלוג שמלות
-* **Dresses** – מלאי לפי מידה וזמינות
-* **Orders & OrderItems** – הזמנות והשכרות
-* **Rating** – Auditing וניטור פעילות API
-
----
-
-
-## 🧪 Testing & QA
-
-### סוגי בדיקות:
-
-* **Unit Tests**
-  בדיקות לוגיקה בשכבת Services עם Moq
-
-* **Integration Tests**
-  בדיקות מול DB אמיתי עם `DatabaseFixture`
-
-### הרצת בדיקות:
-
+### 1. Redis (Docker)
 ```bash
-dotnet test server/Tests/Tests.csproj
+cd server/WebApiShop
+docker-compose up -d
+```
+
+### 2. Python AI Service
+```bash
+# נדרש להיות רץ על localhost:8001
+# endpoints: POST /chat, POST /search
+```
+
+### 3. Backend
+```bash
+cd server/WebApiShop
+dotnet run
+# רץ על https://localhost:44362
+```
+
+### 4. Frontend
+```bash
+cd Client
+npm install
+npm start
+# רץ על http://localhost:4200
 ```
 
 ---
 
-## 🛡️ Security & Data Management
+## פיצ'רים
 
-* **Separation of Concerns** – הפרדה מלאה בין שכבות
-* **JWT Authorization** – Role-Based Access Control
-* **Global Error Handling Middleware** – טיפול אחיד בשגיאות ללא חשיפת מידע רגיש
+### AI Chatbot
+- כפתור צ'אט קבוע בפינה — נפתח כחלון שיחה
+- שולח הודעה + היסטוריה + רשימת מוצרים מה-DB ל-Python AI
+- רשימת המוצרים נשמרת ב-Redis (TTL שעה) — DB נשאל פעם אחת בלבד
+- עיצוב בסגנון האתר: צבע `#6b5b5e`, RTL, אנימציית typing
+
+**זרימה:**
+```
+Angular → POST /api/Chat → .NET (מוסיף products מ-Redis/DB) → Python /chat → תשובה
+```
+
+### חיפוש סמנטי
+- שדה חיפוש בסרגל הסינון — מופעל עם Enter או "החל סינון"
+- שולח שאילתה + רשימת מוצרים ל-Python AI לחיפוש וקטורי
+- תוצאות מוצגות כאותם כרטיסי מוצר בגריד
+- איפוס חיפוש מחזיר לרשימה הרגילה
+- רשימת המוצרים נשמרת ב-Redis (אותו cache key עם ChatController)
+
+**זרימה:**
+```
+Angular → POST /api/Search → .NET (מוסיף products מ-Redis/DB) → Python /search → כרטיסים
+```
 
 ---
 
-## 📈 Roadmap
+## Redis Cache
 
-* [ ] Dockerization (Docker + Compose)
-* [ ] CI/CD עם GitHub Actions
-* [ ] Azure Blob Storage לניהול תמונות
+- מוגדר ב-`docker-compose.yml` עם סיסמה
+- `appsettings.json` → `ConnectionStrings.Redis`
+- `ChatController` ו-`SearchController` משתמשים באותו cache key: `product_list`
+- TTL: שעה אחת
 
 ---
 
-## 📫 Contact
+## הוראות לסוכן קוד
 
-נבנה על ידי **Rivka445**
-
-* פתיחת Issues לשיפורים / באגים
-* Pull Requests מתקבלים
+ראה `.github/INSTRUCTION.md` לסיכום כללי.
+ראה `.github/INSTRUCTION_CONTROLLERS.md` לפרטים על Controllers.
+ראה `.github/INSTRUCTION_REPOSITORIES.md` לפרטים על Repositories.
