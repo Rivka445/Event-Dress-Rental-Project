@@ -6,6 +6,7 @@ import { HeaderComponent } from './components/header-component/header-component'
 import { FooterComponent } from './components/footer-component/footer-component';
 import { CartComponent } from './components/cart-component/cart-component';
 import { CartService } from './services/cart-service';
+import { ChatComponent } from './components/chat-component/chat-component';
 import { AlertService } from './services/alert-service';
 import { DrawerModule } from 'primeng/drawer'; 
 import { ToastModule } from 'primeng/toast';  
@@ -20,7 +21,8 @@ import { ToastModule } from 'primeng/toast';
     FormsModule,
     CartComponent ,
     DrawerModule,
-    ToastModule
+    ToastModule,
+    ChatComponent
   ],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']

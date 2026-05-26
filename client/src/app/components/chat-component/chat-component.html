@@ -1,0 +1,21 @@
+
+<button class="chat-toggle" (click)="isOpen = !isOpen">
+  {{ isOpen ? '✕' : '💬' }}
+</button>
+
+<div class="chat-window" *ngIf="isOpen">
+  <div class="chat-header">AI Shopping Assistant</div>
+
+  <div class="chat-messages">
+    <div *ngFor="let m of messages" [class]="'msg ' + m.role">
+      {{ m.content }}
+    </div>
+    <div *ngIf="loading" class="msg assistant">Typing...</div>
+  </div>
+
+  <div class="chat-input">
+    <textarea [(ngModel)]="input" (keydown)="onKey($event)"
+              placeholder="Ask about our products..."></textarea>
+    <button (click)="send()" [disabled]="loading">Send</button>
+  </div>
+</div>
