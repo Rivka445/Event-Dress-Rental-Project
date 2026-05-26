@@ -2,6 +2,7 @@
 using Entities;
 using DTOs;
 using Repositories;
+using BCrypt.Net;
 namespace Services
 {
     public class UserService : IUserService
@@ -46,6 +47,8 @@ namespace Services
         public async Task<AuthenticatedUser> AddUser(UserRegisterDTO newUser)
         {
             User userRegister = _mapper.Map<UserRegisterDTO, User>(newUser);
+            // Hash password before saving
+            userRegister.Password = BCrypt.Net.BCrypt.HashPassword(userRegister.Password);
             User user = await _userRepository.AddUser(userRegister);
             var token = _tokenService.CreateToken(user);
             UserDTO userDTO = _mapper.Map<User, UserDTO>(user);
@@ -61,6 +64,10 @@ namespace Services
             User loginUser = _mapper.Map<UserLoginDTO,User>(existUser);
             User? user = await _userRepository.LogIn(loginUser);
             if (user == null)
+                return null;
+            // Verify password using BCrypt
+            bool verified = BCrypt.Net.BCrypt.Verify(loginUser.Password, user.Password);
+            if (!verified)
                 return null;
             UserDTO userDTO = _mapper.Map<User, UserDTO>(user);
             var token = _tokenService.CreateToken(user);

@@ -32,12 +32,10 @@ namespace Repositories
      
         public async Task<User?> LogIn(User user)
         {
+            // return user by identifying fields (firstName + lastName here). Password verification is done in service layer.
             User? currentUser = await _eventDressRentalContext.Users
-                .FirstOrDefaultAsync(u => u.FirstName == user.FirstName 
-                                       && u.Password == user.Password 
-                                       && u.LastName==user.LastName);
+                .FirstOrDefaultAsync(u => u.FirstName == user.FirstName && u.LastName == user.LastName);
             return currentUser;
-     
         }
         public async Task<User> AddUser(User user)
         {
