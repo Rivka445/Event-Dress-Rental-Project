@@ -1,0 +1,8 @@
+.vs/
+bin/
+obj/
+**/node_modules/
+**/.git
+**/.github
+appsettings.Development.json
+appsettings.*.json.user
