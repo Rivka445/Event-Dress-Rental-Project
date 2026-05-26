@@ -7,12 +7,13 @@ import Aura from '@primeuix/themes/aura';
 
 import { routes } from './app.routes';
 import { jwtInterceptor } from './interceptors/jwt.interceptor';
+import { retryInterceptor } from './interceptors/retry.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([jwtInterceptor]) 
+      withInterceptors([retryInterceptor, jwtInterceptor]) 
     ),
     provideAnimationsAsync(), 
     providePrimeNG({

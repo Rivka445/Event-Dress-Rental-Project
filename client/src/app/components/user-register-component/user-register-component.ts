@@ -90,7 +90,6 @@ export class UserRegisterComponent {
       this.errorMessage.set('אנא מלאי את כל השדות בצורה תקינה');
       return;
     }
-
     this.loading.set(true);
     this.errorMessage.set('');
     this.userService.register(this.user).subscribe({

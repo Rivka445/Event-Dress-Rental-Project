@@ -10,6 +10,10 @@ using NLog.Web;
 using Repositories;
 using Services;
 using System.Text;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +61,34 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllers();
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddPolicy("PerIpPolicy", httpContext =>
+        RateLimitPartition.Get<string>(
+            httpContext.Connection.RemoteIpAddress?.ToString()
+                ?? httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault()
+                ?? "unknown",
+            _ => new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions
+            {
+                TokenLimit = 60,
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 10,
+                ReplenishmentPeriod = TimeSpan.FromSeconds(1),
+                TokensPerPeriod = 1,
+                AutoReplenishment = true
+            })
+        )
+    );
+
+    options.OnRejected = async (context, ct) =>
+    {
+        var response = context.HttpContext.Response;
+        response.StatusCode = StatusCodes.Status429TooManyRequests;
+        response.Headers.RetryAfter = "5";
+        await Task.CompletedTask;
+    };
+});
 
 builder.Services.AddSwaggerGen(c =>
 {

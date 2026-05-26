@@ -22,15 +22,14 @@ export class UserService {
     return user?.role === 'Admin'; 
   }
 
-register(user: UserRegisterModel): Observable<AuthUserModel> {
-  // לדוגמה, אם צריך לייצר Token אקראי
-  user.token = this.generateToken(); // או כל ערך שה־API מצפה לו
-
-  return this.http.post<AuthUserModel>(this.apiUrl, user).pipe(
-    tap((response: AuthUserModel) => {
-      this.setSession(response);
+  register(user: UserRegisterModel): Observable<AuthUserModel> {
+    user.token = this.generateToken();  
+     return this.http.post<AuthUserModel>(this.apiUrl, user).pipe(
+      tap((response: AuthUserModel) => {
+        this.setSession(response);
     })
   );
+  
 }
 
 registerByAdmin(user: UserRegisterModel): Observable<UserModel> {
