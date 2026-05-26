@@ -62,6 +62,14 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllers();
 
+// Configure Redis distributed cache
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    // expect configuration key: "Redis:Configuration" (e.g. "localhost:6379")
+    options.Configuration = builder.Configuration.GetConnectionString("Redis") ?? builder.Configuration["Redis:Configuration"] ?? "localhost:6379";
+    options.InstanceName = "EventDressRental_";
+});
+
 builder.Services.AddRateLimiter(options =>
 {
     options.AddPolicy("PerIpPolicy", httpContext =>
