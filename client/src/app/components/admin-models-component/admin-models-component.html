@@ -99,11 +99,11 @@
         </div>
 
         <div class="form-field">
-          <label>קישור לתמונה *</label>
-          <input pInputText [(ngModel)]="editingModel.imgUrl" placeholder="https://..." />
-          @if (editingModel.imgUrl) {
+          <label>תמונה (Base64) *</label>
+          <input pInputText [(ngModel)]="editingModel.image" placeholder="הכנס Base64 של תמונה" />
+          @if (editingModel.image) {
             <div class="image-preview-small">
-              <img [src]="editingModel.imgUrl" [alt]="editingModel.name" />
+              <img [src]="editingModel.image" [alt]="editingModel.name" />
             </div>
           }
         </div>

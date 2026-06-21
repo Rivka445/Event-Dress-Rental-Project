@@ -169,7 +169,7 @@ export class AdminModelsComponent implements OnInit {
       id: 0,
       name: '',
       description: '',
-      imgUrl: '',
+      image: '',
       basePrice: 0,
       color: '',
       isActive: true,
@@ -200,7 +200,7 @@ export class AdminModelsComponent implements OnInit {
       size: '',
       price: this.editingModel!.basePrice || 0,
       note: '',
-      modelImgUrl: this.editingModel!.imgUrl
+      modelImage: this.editingModel!.image
     };
   }
 
@@ -289,7 +289,7 @@ export class AdminModelsComponent implements OnInit {
     const updateData = {
       name: this.editingModel.name,
       description: this.editingModel.description,
-      imgUrl: this.editingModel.imgUrl,
+      image: this.editingModel.image,
       basePrice: this.editingModel.basePrice,
       color: this.editingModel.color,
       categoriesId: this.editingModel.categories.map(c => c.id)

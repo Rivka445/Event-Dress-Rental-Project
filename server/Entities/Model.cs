@@ -13,7 +13,7 @@ public partial class Model
 
     public string Description { get; set; }
 
-    public string ImgUrl { get; set; }
+    public byte[] ImageData { get; set; }
 
     public int BasePrice { get; set; }
 

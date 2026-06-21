@@ -131,7 +131,7 @@ export class ListModelsComponent implements OnInit, AfterViewInit {
         id: r.id ?? 0,
         name: r.name ?? '',
         description: r.description ?? '',
-        imgUrl: r.imgUrl ?? '',
+        image: r.image ?? '',
         basePrice: r.basePrice ?? 0,
         color: r.color ?? '',
         isActive: r.isActive ?? true,

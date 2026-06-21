@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +41,7 @@ namespace Services
             CreateMap<OrderDTO, Order>();
             CreateMap<Dress, DressDTO>()
                 .ForMember(d => d.ModelName, o => o.MapFrom(s => s.Model.Name))
-                .ForMember(d => d.ModelImgUrl, o => o.MapFrom(s => s.Model.ImgUrl));
+                .ForMember(d => d.ModelImage, o => o.MapFrom(s => s.Model.ImageData != null ? $"data:image/png;base64,{Convert.ToBase64String(s.Model.ImageData)}" : null));
             CreateMap<DressDTO, Dress>()
                 .ForPath(d => d.Model.Name, o => o.MapFrom(s => s.ModelName));
             CreateMap<Dress, NewDressDTO>().ReverseMap();
@@ -49,11 +49,24 @@ namespace Services
                 .ForMember(d => d.ModelId, o => o.MapFrom(s => s.ModelId))
                 .ForPath(d => d.Model.Id, o => o.MapFrom(s => s.ModelId));
             CreateMap<Dress, NewDressDTO>().ReverseMap();
-            CreateMap<Model, ModelDTO>().ReverseMap();
+            CreateMap<Model, ModelDTO>()
+                .ConstructUsing((s, ctx) => new ModelDTO(
+                    s.Id, s.Name, s.Description,
+                    s.ImageData != null ? $"data:image/png;base64,{Convert.ToBase64String(s.ImageData)}" : null,
+                    s.BasePrice, s.Color, s.IsActive,
+                    ctx.Mapper.Map<List<CategoryDTO>>(s.Categories)));
+            CreateMap<ModelDTO, Model>();
             CreateMap<Model, NewModelDTO>();
             CreateMap<NewModelDTO, Model>()
+                 .ForMember(d => d.ImageData, o => o.MapFrom(s => FromBase64(s.Image)))
                  .ForMember(d => d.Categories, o => o.MapFrom(s => s.CategoriesId.Select(id => new Category { Id = id }).ToList()));
 
+        }
+        private static byte[] FromBase64(string data)
+        {
+            if (data == null) return null;
+            var base64 = data.Contains(",") ? data.Split(",")[1] : data;
+            return Convert.FromBase64String(base64);
         }
     }
 }

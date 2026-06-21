@@ -152,7 +152,7 @@
                       </td>
                       <td>
                         <ng-container *ngIf="dressCache[item.dressId]; else imgLoading">
-                          <img [src]="dressCache[item.dressId].modelImgUrl" alt="img" style="height:50px;" />
+                          <img [src]="dressCache[item.dressId].modelImage" alt="img" style="height:50px;" />
                         </ng-container>
                         <ng-template #imgLoading>
                           <span *ngIf="loadingDressIds.has(item.dressId)">טוען...</span>

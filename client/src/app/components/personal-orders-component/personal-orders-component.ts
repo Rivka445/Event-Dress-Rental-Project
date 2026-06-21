@@ -77,7 +77,7 @@ export class PersonalOrdersComponent implements OnInit, OnDestroy {
   viewOrderDetails(order: any) {
     const initialItems = (order.orderItems || []).map((item: any) => ({
       ...item,
-      modelImgUrl: item.modelImgUrl || null,
+      modelImage: item.modelImage || null,
       imageLoading: true
     }));
 
@@ -88,19 +88,19 @@ export class PersonalOrdersComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const imageRequests: Observable<{ dressId: number; modelImgUrl: string | null }>[] = order.orderItems.map((item: any) =>
+    const imageRequests = order.orderItems.map((item: any) =>
       this.dressService.getDressById(item.dressId).pipe(
-        map(dress => ({ dressId: item.dressId as number, modelImgUrl: dress.modelImgUrl ?? null })),
-        catchError(() => of({ dressId: item.dressId as number, modelImgUrl: null }))
+        map(dress => ({ dressId: item.dressId as number, modelImage: dress.modelImage ?? null })),
+        catchError(() => of({ dressId: item.dressId as number, modelImage: null }))
       )
     );
 
-    forkJoin(imageRequests).subscribe((results: Array<{ dressId: number; modelImgUrl: string | null }>) => {
+    forkJoin(imageRequests as any[]).subscribe((results: any[]) => {
       const updatedItems = initialItems.map((item: any) => {
-        const match = results.find((res: { dressId: number; modelImgUrl: string | null }) => res.dressId === item.dressId);
+        const match = results.find((res: any) => res.dressId === item.dressId);
         return {
           ...item,
-          modelImgUrl: match?.modelImgUrl || null,
+          modelImage: match?.modelImage || null,
           imageLoading: false
         };
       });

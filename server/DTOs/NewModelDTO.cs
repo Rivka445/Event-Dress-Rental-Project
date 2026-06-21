@@ -14,7 +14,7 @@ namespace DTOs
         [Required]
         string Description,
         [Required]
-        string ImgUrl,
+        string Image,
         [Required]
         int BasePrice,
         [Required]

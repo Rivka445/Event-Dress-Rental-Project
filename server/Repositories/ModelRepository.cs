@@ -70,7 +70,7 @@ namespace Repositories
             }
             existingModel.Name = model.Name;
             existingModel.Description = model.Description;
-            existingModel.ImgUrl = model.ImgUrl;
+            existingModel.ImageData = model.ImageData;
             existingModel.BasePrice = model.BasePrice;
             existingModel.Color = model.Color;
             existingModel.IsActive = model.IsActive;

@@ -44,7 +44,7 @@ namespace EventDressRental.Controllers
             var modelsResult = await _products.GetModelds(null, null, null, [], [], 1, 50);
             var productList = modelsResult.Items.Select(m => (object)new
             {
-                m.Id, m.Name, m.Color, m.Description, m.BasePrice, m.IsActive, m.ImgUrl
+                m.Id, m.Name, m.Color, m.Description, m.BasePrice, m.IsActive, m.Image
             }).ToList();
 
             await _cache.SetStringAsync(CacheKey, JsonSerializer.Serialize(productList),

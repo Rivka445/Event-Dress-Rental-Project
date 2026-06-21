@@ -15,7 +15,7 @@
         @for (item of draft.items; track item.id) {
           <div class="cart-item-row" [class.slide-in]="isAnimated(draft.id, item.id)">
             <div class="item-img">
-              <img [src]="item.modelImgUrl" [alt]="item.modelName" (error)="onImageError($event)">
+              <img [src]="item.modelImage" [alt]="item.modelName" (error)="onImageError($event)">
             </div>
             <div class="item-info">
               <h4>{{ item.modelName }}</h4>

@@ -5,5 +5,5 @@ export class DressModel {
     size!: string;
     price!: number;
     note?: string;        
-    modelImgUrl!: string;
+    modelImage!: string;
 }

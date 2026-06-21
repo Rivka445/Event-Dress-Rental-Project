@@ -67,7 +67,7 @@
           @for (item of selectedOrder().orderItems; track item.dressId) {
             <div class="item-row">
               <div class="item-image">
-                <img [src]="item.modelImgUrl || 'assets/images/placeholder-dress.png'" alt="{{ item.modelName }}" (error)="onOrderImageError($event)">
+                <img [src]="item.modelImage || 'assets/images/placeholder-dress.png'" alt="{{ item.modelName }}" (error)="onOrderImageError($event)">
               </div>
               <span class="item-name">{{ item.modelName }}</span>
               @if (item.size) {

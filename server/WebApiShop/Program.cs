@@ -45,7 +45,8 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddHttpClient();
 
 builder.Services.AddDbContext<EventDressRentalContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Home")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Home"),
+        sqlOptions => sqlOptions.EnableRetryOnFailure(3)));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

@@ -19,6 +19,6 @@ namespace DTOs
         int Price,
         string Note,
         [Required]
-        string ModelImgUrl
+        string ModelImage
     );
 }

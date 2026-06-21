@@ -73,9 +73,8 @@ public partial class EventDressRentalContext : DbContext
             entity.Property(e => e.Description)
                 .IsRequired()
                 .HasColumnName("description");
-            entity.Property(e => e.ImgUrl)
-                .IsRequired()
-                .HasColumnName("img_url");
+            entity.Property(e => e.ImageData)
+                .HasColumnName("image");
             entity.Property(e => e.IsActive)
                 .HasDefaultValue(true)
                 .HasAnnotation("Relational:DefaultConstraintName", "DF_Models_is_active")
