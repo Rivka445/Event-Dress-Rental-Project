@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "WebApiShop\\EventDressRental.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\..\\..\\שנה ב'\\Architecture\\BillingConsumer\\BillingConsumer.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

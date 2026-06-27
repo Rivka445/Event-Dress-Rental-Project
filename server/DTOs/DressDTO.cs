@@ -20,5 +20,8 @@ namespace DTOs
         string Note,
         [Required]
         string ModelImage
-    );
+    )
+    {
+        public DressDTO() : this(0, string.Empty, string.Empty, 0, string.Empty, string.Empty) { }
+    }
 }
