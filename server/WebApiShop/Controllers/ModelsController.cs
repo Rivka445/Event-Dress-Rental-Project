@@ -67,7 +67,7 @@ namespace EventDressRental.Controllers
             if (!_modelService.checkPrice(updateModel.BasePrice))
                 return BadRequest("Price must be more than 0.");
             if (!await _modelService.IsExistsModelById(id))
-                return NotFound(id);
+                return NotFound(new { message = "Model not found", requestedId = id });
 
             await _modelService.UpdateModel(id, updateModel);
             return Ok(); 
@@ -79,7 +79,7 @@ namespace EventDressRental.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             if (!await _modelService.IsExistsModelById(id))
-                return NotFound(id);
+                return NotFound(new { message = "Model not found", requestedId = id });
             await _modelService.DeleteModel(id);
             return Ok();
         }

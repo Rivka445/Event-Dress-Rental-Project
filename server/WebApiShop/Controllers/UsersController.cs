@@ -75,7 +75,7 @@ namespace EventDressRental.Controllers
         public async Task<IActionResult> Put(int id, [FromBody] UserRegisterDTO updateUser)
         {
             if (await _userService.IsExistsUserById(id) == false)
-                return NotFound(id);
+                return NotFound(new { message = "User not found", requestedId = id });
             int passwordScore = _userPasswordService.CheckPassword(updateUser.Password);
             if (passwordScore < 2)
                 return BadRequest("Password is not strong enough");

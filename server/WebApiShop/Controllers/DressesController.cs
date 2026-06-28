@@ -38,7 +38,7 @@ namespace EventDressRental.Controllers
         public async Task<ActionResult<List<string>>> GetSizesByModelId(int modelId)
         {
             if (await _modelService.GetModelById(modelId) == null)
-                return NotFound(" not founs model wuth id" + modelId);
+                return NotFound(new { message = "Dress not found", requestedId = modelId });
 
             List<string> list = await _dressService.GetSizesByModelId(modelId);
             return Ok(list);
@@ -49,7 +49,7 @@ namespace EventDressRental.Controllers
         public async Task<ActionResult<int>> GetCountByModelIdAndSizeForDate(int modelId, string size, DateOnly date)
         {
             if (await _modelService.GetModelById(modelId) == null)
-                return NotFound(" not founs model with id" + modelId);
+                return NotFound(new { message = "Model not found", requestedId = modelId });
             if (!_dressService.checkDate(date))
                 return BadRequest("the date cant be in the past");
 
@@ -60,7 +60,7 @@ namespace EventDressRental.Controllers
         public async Task<ActionResult<DressDTO>> GetDressByModelIdAndSize(int modelId, string size)
         {
             if (await _modelService.GetModelById(modelId) == null)
-                return NotFound(" not founs model with id" + modelId);
+                return NotFound(new { message = "Model not found", requestedId = modelId });
 
             DressDTO dress = await _dressService.GetDressByModelIdAndSize(modelId, size);
             return dress;
@@ -89,10 +89,10 @@ namespace EventDressRental.Controllers
                 return BadRequest("Price must be more than 0.");
 
             if (!await _dressService.IsExistsDressById(id))
-                return NotFound("not found dress with ID " + id);
+                return NotFound(new { message = "Dress not found", requestedId = id });
 
             if (!await _modelService.IsExistsModelById(updateDress.ModelId))
-                return NotFound(" not founs model wuth id" + updateDress.ModelId);
+                return NotFound(new { message = "Model not found", requestedId = updateDress.ModelId });
 
 
             await _dressService.UpdateDress(id, updateDress);
@@ -103,7 +103,7 @@ namespace EventDressRental.Controllers
         public async Task<ActionResult<List<DressDTO>>> GetDressesByModelId(int modelId)
         {
             if (await _modelService.GetModelById(modelId) == null)
-                return NotFound(" not found model with id" + modelId);
+                return NotFound(new { message = "Model not found", requestedId = modelId });
 
             List<DressDTO> dresses = await _dressService.GetDressesByModelId(modelId);
             return Ok(dresses);
@@ -115,7 +115,7 @@ namespace EventDressRental.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             if (!await _dressService.IsExistsDressById(id))
-                return NotFound("not found dress with ID " + id);
+                return NotFound(new { message = "Dress not found", requestedId = id });
             await _dressService.DeleteDress(id);
             return Ok();
         }

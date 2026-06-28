@@ -61,7 +61,7 @@ namespace EventDressRental.Controllers
         public async Task<ActionResult<List<OrderDTO>>> GetOrderByUserId(int userId)
         {
             if (await _userService.GetUserById(userId) == null)
-                return NotFound(userId);
+                return NotFound(new { message = "User not found", requestedId = userId });
             List<OrderDTO> list = await _orderService.GetOrderByUserId(userId);
             if (list.Count == 0)
                 return NoContent();
